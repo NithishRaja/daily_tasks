@@ -3,14 +3,15 @@ FROM python:3-slim
 
 # Create a python directory
 RUN mkdir /home/daily
+RUN mkdir /home/daily/src
 
 # Set workdir
 WORKDIR /home/daily
 
 # Copy code
-COPY ./quote.py /home/daily
-COPY ./day.py /home/daily
-COPY ./song.py /home/daily
+COPY ./src/quote.py /home/daily/src
+COPY ./src/day.py /home/daily/src/
+COPY ./src/song.py /home/daily/src/
 COPY ./index.py /home/daily
 COPY ./README.md /home/daily
 COPY ./requirements.txt /home/daily
