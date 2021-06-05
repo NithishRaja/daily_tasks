@@ -1,0 +1,5 @@
+# Package for HTTP requests
+requests
+
+# Package for parsing HTML
+bs4

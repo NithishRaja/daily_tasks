@@ -1,0 +1,11 @@
+# Ignore pycache
+__pycache__/*
+
+# Ignore scripts
+*.sh
+
+# Ignore test files
+*test.py
+
+# Ignore notebook
+*.ipynb
