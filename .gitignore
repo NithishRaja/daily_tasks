@@ -15,3 +15,6 @@ __pycache__/*
 # Ignore data directory
 data/*
 !data/cache.json
+
+# Ignore credentials file
+credentials.json
