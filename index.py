@@ -19,6 +19,7 @@ def day():
     currentTime = datetime.now()
     # Get allowed time difference
     delta = timedelta(days=config["expiry"]["day"][0], seconds=config["expiry"]["day"][1], microseconds=config["expiry"]["day"][2])
+
     # Check if cache has expired
     if currentTime - lastUpdated > delta:
         # Iterate till request is a success
@@ -32,7 +33,20 @@ def day():
                 json.dump(day, file)
                 # Close file
                 file.close()
+
+                # Acquire lock
+                cacheLock.acquire()
                 # Update cache timer
+                file = open("./data/cache.json", "w")
+                # Update cache with current time data
+                cache["day"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+                # Write to file
+                json.dump(cache, file)
+                # Close file
+                file.close()
+                # Release lock
+                cacheLock.release()
+
                 # Exit loop
                 break
             except:
@@ -47,6 +61,7 @@ def quote():
     currentTime = datetime.now()
     # Get allowed time difference
     delta = timedelta(days=config["expiry"]["quote"][0], seconds=config["expiry"]["quote"][1], microseconds=config["expiry"]["quote"][2])
+
     # Check if cache has expired
     if currentTime - lastUpdated > delta:
         # Iterate till request is a success
@@ -60,6 +75,20 @@ def quote():
                 json.dump(quote, file)
                 # Close file
                 file.close()
+
+                # Acquire lock
+                cacheLock.acquire()
+                # Update cache timer
+                file = open("./data/cache.json", "w")
+                # Update cache with current time data
+                cache["quote"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+                # Write to file
+                json.dump(cache, file)
+                # Close file
+                file.close()
+                # Release lock
+                cacheLock.release()
+
                 # Exit loop
                 break
             except:
@@ -74,6 +103,7 @@ def song():
     currentTime = datetime.now()
     # Get allowed time difference
     delta = timedelta(days=config["expiry"]["song"][0], seconds=config["expiry"]["song"][1], microseconds=config["expiry"]["song"][2])
+
     # Check if cache has expired
     if currentTime - lastUpdated > delta:
         # Iterate till request is a success
@@ -87,6 +117,20 @@ def song():
                 json.dump(song, file)
                 # Close file
                 file.close()
+
+                # Acquire lock
+                cacheLock.acquire()
+                # Update cache timer
+                file = open("./data/cache.json", "w")
+                # Update cache with current time data
+                cache["song"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+                # Write to file
+                json.dump(cache, file)
+                # Close file
+                file.close()
+                # Release lock
+                cacheLock.release()
+
                 # Exit loop
                 break
             except:
@@ -121,6 +165,9 @@ file = open("./data/cache.json")
 cache = json.load(file)
 # Close file
 file.close()
+
+# Initialise semaphore for cache
+cacheLock = threading.Semaphore()
 
 # Initialise threads
 dayThread = threading.Thread(target=day, args=[])
