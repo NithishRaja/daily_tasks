@@ -13,3 +13,4 @@ __pycache__/*
 
 # Ignore data directory
 data/*
+!data/cache.json
