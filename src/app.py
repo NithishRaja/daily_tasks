@@ -179,43 +179,43 @@ class App:
 
     # Function to update song cache, if cache has expired
     def song(self):
-        # Get time of last data update
-        lastUpdated = datetime(year=self.cache["song"][0], month=self.cache["song"][1], day=self.cache["song"][2], hour=self.cache["song"][3])
-        # Get current time
-        currentTime = datetime.now()
-        # Get allowed time difference
-        delta = timedelta(days=self.config["expiry"]["song"][0], seconds=self.config["expiry"]["song"][1], microseconds=self.config["expiry"]["song"][2])
-
-        # Check if cache has expired
-        if currentTime - lastUpdated > delta:
             # Iterate till request is a success
             while(True):
                 try:
-                    # Call function to get song
-                    song = getSong()
-                    # Call function to get tweets
-                    tweets = getTweet(song["title"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["song"])
-                    # Add tweets to day object
-                    song["tweets"] = tweets
-                    # Open file
-                    file = open("./data/song.json", "w")
-                    # Write to file
-                    json.dump(song, file)
-                    # Close file
-                    file.close()
+                    # Get time of last data update
+                    lastUpdated = datetime(year=self.cache["song"][0], month=self.cache["song"][1], day=self.cache["song"][2], hour=self.cache["song"][3])
+                    # Get current time
+                    currentTime = datetime.now()
+                    # Get allowed time difference
+                    delta = timedelta(days=self.config["expiry"]["song"][0], seconds=self.config["expiry"]["song"][1], microseconds=self.config["expiry"]["song"][2])
 
-                    # Acquire lock
-                    self.cacheLock.acquire()
-                    # Update cache timer
-                    file = open("./data/cache.json", "w")
-                    # Update cache with current time data
-                    self.cache["song"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
-                    # Write to file
-                    json.dump(self.cache, file)
-                    # Close file
-                    file.close()
-                    # Release lock
-                    self.cacheLock.release()
+                    # Check if cache has expired
+                    if currentTime - lastUpdated > delta:
+                        # Call function to get song
+                        song = getSong(self.credentials["youtube"]["APIKey"])
+                        # Call function to get tweets
+                        tweets = getTweet(song["title"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["song"])
+                        # Add tweets to day object
+                        song["tweets"] = tweets
+                        # Open file
+                        file = open("./data/song.json", "w")
+                        # Write to file
+                        json.dump(song, file)
+                        # Close file
+                        file.close()
+
+                        # Acquire lock
+                        self.cacheLock.acquire()
+                        # Update cache timer
+                        file = open("./data/cache.json", "w")
+                        # Update cache with current time data
+                        self.cache["song"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+                        # Write to file
+                        json.dump(self.cache, file)
+                        # Close file
+                        file.close()
+                        # Release lock
+                        self.cacheLock.release()
 
                     # Exit loop
                     break

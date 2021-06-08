@@ -4,7 +4,7 @@
 #
 
 # Dependencies
-import requests, bs4
+import requests, bs4, json
 import random, urllib
 
 # Function to check if string is empty or has escape characters
@@ -50,7 +50,25 @@ def getLyrics(title, artist):
     # Return lyrics
     return lyrics
 
-def getSong():
+def getVideo(title, artist, key):
+    # Initialise object to hold video URLs
+    obj = {}
+    # Send request to get song video URL
+    res = requests.get("https://www.googleapis.com/youtube/v3/search?q="+title+" "+artist+"&maxResults=1&key="+key)
+    # Parse JSON
+    info = json.loads(res.text)
+    # Update object with video URL
+    obj["watch"] = "https://www.youtube.com/watch?v="+info["items"][0]["id"]["videoId"]
+    # Send request to get song lyric video URL
+    res = requests.get("https://www.googleapis.com/youtube/v3/search?q="+title+" "+artist+" lyrics"+"&maxResults=1&key="+key)
+    # Parse JSON
+    info = json.loads(res.text)
+    # Update object with video URL
+    obj["lyrics"] = "https://www.youtube.com/watch?v="+info["items"][0]["id"]["videoId"]
+    # Return object
+    return obj
+
+def getSong(key):
     # Send request to get song list
     res = requests.get("https://www.billboard.com/charts/hot-100")
     # Parse HTML
@@ -63,6 +81,8 @@ def getSong():
     title = song.select(".chart-element__information__song")[0].text
     # Extract song artist
     artist = song.select(".chart-element__information__artist")[0].text
+    # Call function to get video URL
+    video = getVideo(title, artist, key)
     # Call function to get song lyrics
     lyrics = getLyrics(title, artist)
     # Return song details
@@ -74,7 +94,8 @@ def getSong():
             song.select(".text--peak")[0].text,
             song.select(".text--week")[0].text
         ],
-        "lyrics": lyrics
+        "lyrics": lyrics,
+        "video": video
     }
 
 # Check if module is used as script
