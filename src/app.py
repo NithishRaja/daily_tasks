@@ -11,6 +11,7 @@ from src.day import getDay
 from src.quote import getQuote
 from src.song import getSong
 from src.tweet import getTweet
+from src.score import getScore, getDate
 
 class App:
     # Initialise constructor
@@ -32,6 +33,7 @@ class App:
         self.dayThread = threading.Thread(target=self.day, args=[])
         self.quoteThread = threading.Thread(target=self.quote, args=[])
         self.songThread = threading.Thread(target=self.song, args=[])
+        self.scoreThread = threading.Thread(target=self.score, args=[])
 
     def readConfig(self):
         # Read in configuration
@@ -81,6 +83,7 @@ class App:
         self.dayThread.start()
         self.quoteThread.start()
         self.songThread.start()
+        self.scoreThread.start()
 
     # Function to update day cache, if day cache has expired
     def day(self):
@@ -215,3 +218,40 @@ class App:
                 except:
                     # Print error message
                     print("Failed to get song. Trying again...")
+
+    # Function to get score
+    def score(self):
+        while(True):
+            try:
+                # Check if cache is up to date
+                if self.cache["score"]["date"] == getDate() and self.cache["score"]["status"]:
+                    break
+                else:
+                    # Call function to get score
+                    score = getScore()
+                    # Open file
+                    file = open("./data/score.json", "w")
+                    # Write to file
+                    json.dump(score, file)
+                    # Close file
+                    file.close()
+
+                    # Acquire lock
+                    self.cacheLock.acquire()
+                    # Update cache timer
+                    file = open("./data/cache.json", "w")
+                    # Update cache with current time data
+                    self.cache["score"]["date"] = score["currentDate"]
+                    self.cache["score"]["status"] = score["cache"]
+                    # Write to file
+                    json.dump(self.cache, file)
+                    # Close file
+                    file.close()
+                    # Release lock
+                    self.cacheLock.release()
+
+                    # Exit loop
+                    break
+            except:
+                # Print error message
+                print("Failed to get scores. Trying again...")
