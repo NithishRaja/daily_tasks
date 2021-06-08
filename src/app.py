@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from src.day import getDay
 from src.quote import getQuote
 from src.song import getSong
+from src.tweet import getTweet
 
 class App:
     # Initialise constructor
@@ -23,6 +24,9 @@ class App:
 
         # Call function to read cache
         self.readCache()
+
+        # Call function to read credentials
+        self.readCredentials()
 
         # Initialise threads
         self.dayThread = threading.Thread(target=self.day, args=[])
@@ -64,6 +68,14 @@ class App:
             # Close file
             file.close()
 
+    def readCredentials(self):
+        # Read in configuration
+        file = open("./credentials.json")
+        # Parse JSON
+        self.credentials = json.load(file)
+        # Close file
+        file.close()
+
     def start(self):
         # Start threads
         self.dayThread.start()
@@ -86,6 +98,10 @@ class App:
                 try:
                     # Call function to get day
                     day = getDay()
+                    # Call function to get tweets
+                    tweets = getTweet(day["text"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["day"])
+                    # Add tweets to day object
+                    day["tweets"] = tweets
                     # Open file
                     file = open("./data/day.json", "w")
                     # Write to file
@@ -170,6 +186,10 @@ class App:
                 try:
                     # Call function to get song
                     song = getSong()
+                    # Call function to get tweets
+                    tweets = getTweet(song["title"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["song"])
+                    # Add tweets to day object
+                    song["tweets"] = tweets
                     # Open file
                     file = open("./data/song.json", "w")
                     # Write to file
