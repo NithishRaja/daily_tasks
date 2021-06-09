@@ -4,6 +4,7 @@ __pycache__/*
 
 # Ignore scripts
 *.sh
+!run.sh
 
 # Ignore test files
 *test.py
