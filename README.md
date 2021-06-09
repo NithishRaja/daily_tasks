@@ -1,6 +1,6 @@
 # AUTOMATE DAILY TASKS
 
-A simple program to get the "international day", a random quote and a song
+A simple program to get the "international day", a random quote, a song and NBA scores
 
 ## Editing code
 
@@ -47,3 +47,8 @@ A simple program to get the "international day", a random quote and a song
   }
 }
 ```
+
+# Docker
+
+* The docker image can be found at [docker hub](https://hub.docker.com/repository/docker/nithishraja/start-day)
+* Instructions on how to use the image are also at [docker hub](https://hub.docker.com/repository/docker/nithishraja/start-day)
