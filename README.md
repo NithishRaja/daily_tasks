@@ -9,7 +9,7 @@ A simple program to get the "international day", a random quote and a song
 
 ## Running code
 
-* Run `python index.py` to run the program
+* Run `./run.py` to run the program
 * Data retrieved is stored inside `data/` directory
 
 ### Configuration
@@ -18,3 +18,32 @@ A simple program to get the "international day", a random quote and a song
 * Expiry time should adhere to this format `[<days>, <seconds>, <microseconds>]`
 * Number of tweets retrieved can be altered in `config.json`
 * Number of tweets should always be between 1 to 10
+* `config.json` file should have the following format
+```
+{
+  "expiry": {
+    "day": [<days>, <seconds>, <microseconds>],
+    "quote": [<days>, <seconds>, <microseconds>],
+    "song": [<days>, <seconds>, <microseconds>]
+  },
+  "tweetCount": {
+    "day": <count>,
+    "song": <count>
+  }
+}
+```
+
+### Credentials
+
+* Youtube data api key and twitter bearer token are required
+* Credentials need to be placed inside `credentials.json` file in the format depicted below
+```
+{
+  "twitter": {
+    "BearerToken": <token>
+  },
+  "youtube": {
+    "APIKey": <key>
+  }
+}
+```
