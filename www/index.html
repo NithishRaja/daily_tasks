@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>DASHBOARD</title>
+  </head>
+  <script src="https://unpkg.com/vue@3"></script>
+  <link rel="stylesheet" href="./index.css">
+  <body>
+    <section class="song_section">
+      <div class="song_card">
+        <div class="song_main">
+          <div class="song_title" v-if="song.title">
+            "{{song.title}}"
+          </div>
+          <div class="song_artist" v-if="song.artist">
+            by {{song.artist}}
+          </div>
+        </div>
+        <div class="song_info_list" v-if="song.info">
+          <div class="song_info" v-for="info in song.info">
+            {{info}}
+          </div>
+        </div>
+        <div class="song_links">
+          <a v-if="song.video"
+          :href="song.video.watch"
+          target="_blank"
+          class="watch_video">Watch</a>
+          <a v-if="song.video"
+          :href="song.video.lyrics"
+          target="_blank"
+          class="watch_lyrics">Lyrics</a>
+        </div>
+      </div>
+      <div class="tweet_list">
+        <div class="tweet_card" v-for="tweet in song.tweets">
+            <div class="tweet_header">
+              <img :src="tweet.profile_image_url" alt="">
+              <div class="tweet_user">
+                <a :href="tweet.profile_url"
+                target="_blank"
+                class="tweet_name">{{tweet.name}}</a>
+                <span class="tweet_username">@{{tweet.username}}</span>
+              </div>
+            </div>
+            <div class="tweet_body">
+              <span v-for="text in tweet.text" :class="text.type == 'hashtag'?'tweet_hashtag':'tweet_text'">
+                {{text.text}}
+              </span>
+            </div>
+            <div class="tweet_footer">
+              <a :href="tweet.tweet_url">view tweet</a>
+            </div>
+        </div>
+      </div>
+    </section>
+    <section class="main_section">
+      <div class="quote_card">
+        <div class="quote_header" v-if="quote.topic">
+          {{quote.topic}}
+        </div>
+        <div class="quote_body" v-if="quote.quote">
+          {{quote.quote}}
+        </div>
+        <div class="quote_footer" v-if="quote.author">
+          {{quote.author}}
+        </div>
+      </div>
+      <div class="score_section">
+        <div class="game_card" v-for="game in score.games">
+          <div class="game_header">
+            <div class="game_title">
+              {{game.title}}
+            </div>
+            <div class="game_subtitle">
+              {{game.subtitle}}
+            </div>
+          </div>
+          <div class="game_body">
+            <div class="game_scorecard">
+              <div class="game_hTeam_score">
+                <div class="game_team">
+                  {{game.hTeam.triCode}}
+                </div>
+                <div v-for="score in game.hTeam.score"
+                class="game_score">
+                  {{score}}
+                </div>
+              </div>
+              <div class="game_vTeam_score">
+                <div class="game_team">
+                  {{game.vTeam.triCode}}
+                </div>
+                <div v-for="score in game.vTeam.score"
+                class="game_score">
+                  {{score}}
+                </div>
+              </div>
+            </div>
+            <div class="game_clock">
+              {{game.clock}}
+            </div>
+          </div>
+          <div class="game_footer">
+            <a
+            :href="game.boxscoreURL"
+            target="_blank">view boxscore</a>
+          </div>
+        </div>
+        <div class="score_footer">
+          <a :href="score.standingsURL">view standings</a>
+        </div>
+      </div>
+    </section>
+    <section class="day_section">
+      <div class="day_card">
+        <div class="day_body" v-if="day.text">
+          {{day.text}}
+        </div>
+        <div class="day_footer" v-if="day.link">
+          <a :href="day.link" target="_blank">Read more...</a>
+        </div>
+      </div>
+      <div class="tweet_list">
+        <div class="tweet_card" v-for="tweet in day.tweets">
+            <div class="tweet_header">
+              <img :src="tweet.profile_image_url" alt="">
+              <div class="tweet_user">
+                <a :href="tweet.profile_url"
+                target="_blank"
+                class="tweet_name">{{tweet.name}}</a>
+                <span class="tweet_username">@{{tweet.username}}</span>
+              </div>
+            </div>
+            <div class="tweet_body">
+              <span v-for="text in tweet.text" :class="text.type == 'hashtag'?'tweet_hashtag':'tweet_text'">
+                {{text.text}}
+              </span>
+            </div>
+            <div class="tweet_footer">
+              <a :href="tweet.tweet_url">view tweet</a>
+            </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="./index.js"></script>
+</html>
