@@ -9,7 +9,7 @@ RUN mkdir /home/daily/www
 # Set workdir
 WORKDIR /home/daily
 
-# Copy code
+# Copy scripting code
 COPY ./src/quote.py /home/daily/src
 COPY ./src/day.py /home/daily/src/
 COPY ./src/song.py /home/daily/src/
@@ -17,6 +17,14 @@ COPY ./src/tweet.py /home/daily/src/
 COPY ./src/score.py /home/daily/src/
 COPY ./src/app.py /home/daily/src/
 COPY ./index.py /home/daily
+
+# Copy UI code
+COPY ./www/index.html /home/daily/www
+COPY ./www/index.js /home/daily/www
+COPY ./www/index.css /home/daily/www
+COPY ./index.html /home/daily/
+
+# Copy configurations
 COPY ./README.md /home/daily
 COPY ./requirements.txt /home/daily
 COPY ./config.json /home/daily
