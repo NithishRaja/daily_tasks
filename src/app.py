@@ -55,7 +55,7 @@ class App:
                 "song": [2021, 1, 1, 1],
                 "score": {
                     "date": "20210101",
-                    "status": false
+                    "status": False
                 }
             }
             # Acquire lock
