@@ -1,6 +1,6 @@
 # AUTOMATE DAILY TASKS
 
-A simple program to get the "international day", a random quote, a song and NBA scores
+A simple program to get the "international day", a random quote, a song, calendar events and NBA scores
 
 ## Editing code
 
@@ -11,6 +11,12 @@ A simple program to get the "international day", a random quote, a song and NBA 
 
 * Run `./run.py` to run the program
 * Data retrieved is stored inside `data/` directory
+
+### Calendar
+
+* Create a directory called `userData` in root path
+* Place ics file inside `userData` directory
+* Update ics file name in `config.json` file
 
 ### Configuration
 
@@ -29,6 +35,11 @@ A simple program to get the "international day", a random quote, a song and NBA 
   "tweetCount": {
     "day": <count>,
     "song": <count>
+  },
+  "calendar": {
+    "fileName": <fileName>,
+    "upperLimit": <days>,
+    "lowerLimit": <days>
   }
 }
 ```
