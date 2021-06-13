@@ -193,10 +193,6 @@ class App:
                     if currentTime - lastUpdated > delta:
                         # Call function to get song
                         song = getSong(self.credentials["youtube"]["APIKey"])
-                        # Call function to get tweets
-                        tweets = getTweet(song["title"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["song"])
-                        # Add tweets to day object
-                        song["tweets"] = tweets
                         # Open file
                         file = open("./data/song.json", "w")
                         # Write to file
