@@ -27,20 +27,10 @@ def getDate():
     # Return date
     return links["links"]["currentDate"]
 
-# Function to get NBA scores
-def getScore():
-    # Call function to get links
-    links = getLinks()
-
+# Function to extract game data
+def extractGameData(links, scoreboard):
     # Initialise variable to hold data
     data = {}
-
-    # Get scoreboard
-    scoreboardURL = links["links"]["todayScoreboard"]
-    # Get current day's scoreboard
-    res = requests.get(baseURL+scoreboardURL)
-    # Parse response into JSON object
-    scoreboard = json.loads(res.text)
 
     # Add data to object
     data["currentDate"] = links["links"]["currentDate"]
@@ -98,6 +88,33 @@ def getScore():
 
     # Return data
     return data
+
+# Function to get NBA scores
+def getScore():
+    # Iterate till success
+    while(True):
+        try:
+            # Call function to get links
+            links = getLinks()
+
+            # Get scoreboard
+            scoreboardURL = links["links"]["todayScoreboard"]
+            # Get current day's scoreboard
+            res = requests.get(baseURL+scoreboardURL)
+            # Parse response into JSON object
+            scoreboard = json.loads(res.text)
+
+            # Exit loop
+            break
+        except:
+            print("Failed to get score. Trying again...")
+
+    # Call function to extract game data
+    data = extractGameData(links, scoreboard);
+
+    # Return data
+    return data
+
 
 # Check if module is used as script
 if __name__ == "__main__":

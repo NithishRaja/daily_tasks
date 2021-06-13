@@ -6,6 +6,51 @@
 # Dependencies
 import requests, json, sys
 
+# Function to parse and annotate tweet text
+def parseText(text):
+    # Remove trailing tweet url
+    text = text.split(" ")
+    text.pop()
+    text = " ".join(text)
+    # Initialise variable for annotated text
+    annotatedText = []
+    # Initialise temp variable to hold string
+    previous = ""
+    # Initialise flag
+    flag = True
+    # Iterate over text
+    for j in range(len(text)):
+        # Check if previous string is text
+        if flag:
+            # Check if current character is hashtag
+            if text[j] == "#":
+                if len(previous) > 0:
+                    # Push previous into array
+                    annotatedText.append({"text": previous, "type": "text"})
+                # Reset previous
+                previous = ""
+                # Update flag
+                flag = False
+        else:
+            # Check if current character is space
+            if text[j] == " ":
+                if len(previous) > 0:
+                    # Push previous into array
+                    annotatedText.append({"text": previous, "type": "hashtag"})
+                # Reset previous
+                previous = ""
+                # Update flag
+                flag = True
+        # Add current character to previous
+        previous = previous + text[j]
+
+    if len(previous) > 0:
+        # Push previous into array
+        annotatedText.append({"text": previous, "type": "text" if flag else "hashtag"})
+
+    # Return annotated text
+    return annotatedText
+
 def getTweet(searchKey, token, count):
     # Initialise variable to hold tweets
     tweets = []
@@ -21,73 +66,45 @@ def getTweet(searchKey, token, count):
     url = url+" lang:en is:verified -is:reply -is:retweet"
     url = url+"&max_results=10"
     url = url+"&tweet.fields=attachments,author_id,context_annotations,created_at,entities,id,text"
-    # Send request to get tweets
-    res = requests.get(url, headers={"Authorization": "Bearer "+token})
-    # Parse json
-    obj = json.loads(res.text)
 
-    # Iterate over results
-    for i in range(count):
-        # Get user id
-        user = obj["data"][i]["author_id"]
-        # Generate URL
-        url = baseURL+"/users/"+user+"?"
-        url = url+"&user.fields=id,name,profile_image_url,username,verified"
-        # Send request to get user info
-        res = requests.get(url, headers={"Authorization": "Bearer "+token})
-        # Parse json
-        userObj = json.loads(res.text)
+    # Iterate till success
+    while(True):
+        try:
+            # Send request to get tweets
+            res = requests.get(url, headers={"Authorization": "Bearer "+token})
+            # Parse json
+            obj = json.loads(res.text)
+            # Iterate over results
+            for i in range(count):
+                # Get user id
+                user = obj["data"][i]["author_id"]
+                # Generate URL
+                url = baseURL+"/users/"+user+"?"
+                url = url+"&user.fields=id,name,profile_image_url,username,verified"
+                # Send request to get user info
+                res = requests.get(url, headers={"Authorization": "Bearer "+token})
+                # Parse json
+                userObj = json.loads(res.text)
 
-        # Remove trailing tweet url
-        text = obj["data"][i]["text"].split(" ")
-        text.pop()
-        text = " ".join(text)
-        # Initialise variable for annotated text
-        annotatedText = []
-        # Initialise temp variable to hold string
-        previous = ""
-        # Initialise flag
-        flag = True
-        # Iterate over text
-        for j in range(len(text)):
-            # Check if previous string is text
-            if flag:
-                # Check if current character is hashtag
-                if text[j] == "#":
-                    if len(previous) > 0:
-                        # Push previous into array
-                        annotatedText.append({"text": previous, "type": "text"})
-                    # Reset previous
-                    previous = ""
-                    # Update flag
-                    flag = False
-            else:
-                # Check if current character is space
-                if text[j] == " ":
-                    if len(previous) > 0:
-                        # Push previous into array
-                        annotatedText.append({"text": previous, "type": "hashtag"})
-                    # Reset previous
-                    previous = ""
-                    # Update flag
-                    flag = True
-            # Add current character to previous
-            previous = previous + text[j]
+                # Call function to parse text
+                annotatedText = parseText(obj["data"][i]["text"])
 
-        if len(previous) > 0:
-            # Push previous into array
-            annotatedText.append({"text": previous, "type": "text" if flag else "hashtag"})
+                # Add data to array
+                tweets.append({
+                    "text": annotatedText,
+                    "name": userObj["data"]["name"],
+                    "username": userObj["data"]["username"],
+                    "profile_image_url": userObj["data"]["profile_image_url"],
+                    "profile_url": "https://twitter.com/"+userObj["data"]["username"],
+                    "tweet_url": "https://twitter.com/"+userObj["data"]["username"]+"/status/"+obj["data"][i]["id"],
+                    "verified": userObj["data"]["verified"]
+                })
 
-        # Add data to array
-        tweets.append({
-            "text": annotatedText,
-            "name": userObj["data"]["name"],
-            "username": userObj["data"]["username"],
-            "profile_image_url": userObj["data"]["profile_image_url"],
-            "profile_url": "https://twitter.com/"+userObj["data"]["username"],
-            "tweet_url": "https://twitter.com/"+userObj["data"]["username"]+"/status/"+obj["data"][i]["id"],
-            "verified": userObj["data"]["verified"]
-        })
+            # Exit loop
+            break
+        except:
+            # Print error message
+            print("Failed to get tweets. Trying again...")
 
     return tweets
 

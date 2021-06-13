@@ -18,14 +18,22 @@ def getDay():
                        str(date.today().month).zfill(2),
                        str(date.today().day).zfill(2)
                       )
-    # Send request to get international day
-    res = requests.get(URL)
-    # Parse HTML
-    resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-    # Get text
-    dayList = resHTML.select(".section__cards")[0].select(".card__title a")
-    # Select day at random
-    day = dayList[ random.randint(0, len(dayList)-1) ]
+    # Iterate till success
+    while(True):
+        try:
+            # Send request to get international day
+            res = requests.get(URL)
+            # Parse HTML
+            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
+            # Get text
+            dayList = resHTML.select(".section__cards")[0].select(".card__title a")
+            # Select day at random
+            day = dayList[ random.randint(0, len(dayList)-1) ]
+            # Exit loop
+            break
+        except:
+            # Print error message
+            print("Failed to get day. Trying again...")
     # Return day
     return {
         "text": day.text,

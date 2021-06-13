@@ -100,40 +100,31 @@ class App:
 
         # Check if cache has expired
         if currentTime - lastUpdated > delta:
-            # Iterate till request is a success
-            while(True):
-                try:
-                    # Call function to get day
-                    day = getDay()
-                    # Call function to get tweets
-                    tweets = getTweet(day["text"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["day"])
-                    # Add tweets to day object
-                    day["tweets"] = tweets
-                    # Open file
-                    file = open("./data/day.json", "w")
-                    # Write to file
-                    json.dump(day, file)
-                    # Close file
-                    file.close()
+            # Call function to get day
+            day = getDay()
+            # Call function to get tweets
+            tweets = getTweet(day["text"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["day"])
+            # Add tweets to day object
+            day["tweets"] = tweets
+            # Open file
+            file = open("./data/day.json", "w")
+            # Write to file
+            json.dump(day, file)
+            # Close file
+            file.close()
 
-                    # Acquire lock
-                    self.cacheLock.acquire()
-                    # Update cache timer
-                    file = open("./data/cache.json", "w")
-                    # Update cache with current time data
-                    self.cache["day"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
-                    # Write to file
-                    json.dump(self.cache, file)
-                    # Close file
-                    file.close()
-                    # Release lock
-                    self.cacheLock.release()
-
-                    # Exit loop
-                    break
-                except:
-                    # Print error message
-                    print("Failed to get day. Trying again...")
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["day"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
 
     # Function to update quote cache, if cache has expired
     def quote(self):
@@ -146,112 +137,84 @@ class App:
 
         # Check if cache has expired
         if currentTime - lastUpdated > delta:
-            # Iterate till request is a success
-            while(True):
-                try:
-                    # Call function to get quote
-                    quote = getQuote()
-                    # Open file
-                    file = open("./data/quote.json", "w")
-                    # Write to file
-                    json.dump(quote, file)
-                    # Close file
-                    file.close()
+            # Call function to get quote
+            quote = getQuote()
+            # Open file
+            file = open("./data/quote.json", "w")
+            # Write to file
+            json.dump(quote, file)
+            # Close file
+            file.close()
 
-                    # Acquire lock
-                    self.cacheLock.acquire()
-                    # Update cache timer
-                    file = open("./data/cache.json", "w")
-                    # Update cache with current time data
-                    self.cache["quote"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
-                    # Write to file
-                    json.dump(self.cache, file)
-                    # Close file
-                    file.close()
-                    # Release lock
-                    self.cacheLock.release()
-
-                    # Exit loop
-                    break
-                except:
-                    # Print error message
-                    print("Failed to get quote. Trying again...")
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["quote"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
 
     # Function to update song cache, if cache has expired
     def song(self):
-            # Iterate till request is a success
-            while(True):
-                try:
-                    # Get time of last data update
-                    lastUpdated = datetime(year=self.cache["song"][0], month=self.cache["song"][1], day=self.cache["song"][2], hour=self.cache["song"][3])
-                    # Get current time
-                    currentTime = datetime.now()
-                    # Get allowed time difference
-                    delta = timedelta(days=self.config["expiry"]["song"][0], seconds=self.config["expiry"]["song"][1], microseconds=self.config["expiry"]["song"][2])
+        # Get time of last data update
+        lastUpdated = datetime(year=self.cache["song"][0], month=self.cache["song"][1], day=self.cache["song"][2], hour=self.cache["song"][3])
+        # Get current time
+        currentTime = datetime.now()
+        # Get allowed time difference
+        delta = timedelta(days=self.config["expiry"]["song"][0], seconds=self.config["expiry"]["song"][1], microseconds=self.config["expiry"]["song"][2])
 
-                    # Check if cache has expired
-                    if currentTime - lastUpdated > delta:
-                        # Call function to get song
-                        song = getSong(self.credentials["youtube"]["APIKey"])
-                        # Open file
-                        file = open("./data/song.json", "w")
-                        # Write to file
-                        json.dump(song, file)
-                        # Close file
-                        file.close()
+        # Check if cache has expired
+        if currentTime - lastUpdated > delta:
+            # Call function to get song
+            song = getSong(self.credentials["youtube"]["APIKey"])
+            # Open file
+            file = open("./data/song.json", "w")
+            # Write to file
+            json.dump(song, file)
+            # Close file
+            file.close()
 
-                        # Acquire lock
-                        self.cacheLock.acquire()
-                        # Update cache timer
-                        file = open("./data/cache.json", "w")
-                        # Update cache with current time data
-                        self.cache["song"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
-                        # Write to file
-                        json.dump(self.cache, file)
-                        # Close file
-                        file.close()
-                        # Release lock
-                        self.cacheLock.release()
-
-                    # Exit loop
-                    break
-                except:
-                    # Print error message
-                    print("Failed to get song. Trying again...")
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["song"] = [currentTime.year, currentTime.month, currentTime.day, currentTime.hour]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
 
     # Function to get score
     def score(self):
-        while(True):
-            try:
-                # Check if cache is up to date
-                if self.cache["score"]["date"] == getDate() and self.cache["score"]["status"]:
-                    break
-                else:
-                    # Call function to get score
-                    score = getScore()
-                    # Open file
-                    file = open("./data/score.json", "w")
-                    # Write to file
-                    json.dump(score, file)
-                    # Close file
-                    file.close()
+        # Check if cache is up to date
+        if not (self.cache["score"]["date"] == getDate() and self.cache["score"]["status"]):
+            # Call function to get score
+            score = getScore()
+            # Open file
+            file = open("./data/score.json", "w")
+            # Write to file
+            json.dump(score, file)
+            # Close file
+            file.close()
 
-                    # Acquire lock
-                    self.cacheLock.acquire()
-                    # Update cache timer
-                    file = open("./data/cache.json", "w")
-                    # Update cache with current time data
-                    self.cache["score"]["date"] = score["currentDate"]
-                    self.cache["score"]["status"] = score["cache"]
-                    # Write to file
-                    json.dump(self.cache, file)
-                    # Close file
-                    file.close()
-                    # Release lock
-                    self.cacheLock.release()
-
-                    # Exit loop
-                    break
-            except:
-                # Print error message
-                print("Failed to get scores. Trying again...")
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["score"]["date"] = score["currentDate"]
+            self.cache["score"]["status"] = score["cache"]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
