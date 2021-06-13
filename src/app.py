@@ -12,6 +12,7 @@ from src.quote import getQuote
 from src.song import getSong
 from src.tweet import getTweet
 from src.score import getScore, getDate
+from src.events import getEvents
 
 class App:
     # Initialise constructor
@@ -34,6 +35,7 @@ class App:
         self.quoteThread = threading.Thread(target=self.quote, args=[])
         self.songThread = threading.Thread(target=self.song, args=[])
         self.scoreThread = threading.Thread(target=self.score, args=[])
+        self.eventsThread = threading.Thread(target=self.events, args=[])
 
     def readConfig(self):
         # Read in configuration
@@ -88,6 +90,7 @@ class App:
         self.quoteThread.start()
         self.songThread.start()
         self.scoreThread.start()
+        self.eventsThread.start()
 
     # Function to update day cache, if day cache has expired
     def day(self):
@@ -212,6 +215,37 @@ class App:
             # Update cache with current time data
             self.cache["score"]["date"] = score["currentDate"]
             self.cache["score"]["status"] = score["cache"]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
+
+    # Function to get events
+    def events(self):
+        # Get time of last data update
+        lastUpdated = datetime(year=self.cache["events"][0], month=self.cache["events"][1], day=self.cache["events"][2])
+        # Get current time
+        currentTime = datetime(year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+
+        # Check if cache is up to date
+        if not lastUpdated == currentTime:
+            # Call function to get score
+            events = getEvents(self.config["calendar"]["fileName"], self.config["calendar"]["upperLimit"], self.config["calendar"]["lowerLimit"])
+            # Open file
+            file = open("./data/events.json", "w")
+            # Write to file
+            json.dump(events, file)
+            # Close file
+            file.close()
+
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["events"] = [currentTime.year, currentTime.month, currentTime.day]
             # Write to file
             json.dump(self.cache, file)
             # Close file

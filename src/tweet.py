@@ -51,6 +51,7 @@ def parseText(text):
     # Return annotated text
     return annotatedText
 
+# Function to get tweets
 def getTweet(searchKey, token, count):
     # Initialise variable to hold tweets
     tweets = []
@@ -67,45 +68,41 @@ def getTweet(searchKey, token, count):
     url = url+"&max_results=10"
     url = url+"&tweet.fields=attachments,author_id,context_annotations,created_at,entities,id,text"
 
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get tweets
+    try:
+        # Send request to get tweets
+        res = requests.get(url, headers={"Authorization": "Bearer "+token})
+        # Parse json
+        obj = json.loads(res.text)
+        # Iterate over results
+        for i in range(count):
+            # Get user id
+            user = obj["data"][i]["author_id"]
+            # Generate URL
+            url = baseURL+"/users/"+user+"?"
+            url = url+"&user.fields=id,name,profile_image_url,username,verified"
+            # Send request to get user info
             res = requests.get(url, headers={"Authorization": "Bearer "+token})
             # Parse json
-            obj = json.loads(res.text)
-            # Iterate over results
-            for i in range(count):
-                # Get user id
-                user = obj["data"][i]["author_id"]
-                # Generate URL
-                url = baseURL+"/users/"+user+"?"
-                url = url+"&user.fields=id,name,profile_image_url,username,verified"
-                # Send request to get user info
-                res = requests.get(url, headers={"Authorization": "Bearer "+token})
-                # Parse json
-                userObj = json.loads(res.text)
+            userObj = json.loads(res.text)
 
-                # Call function to parse text
-                annotatedText = parseText(obj["data"][i]["text"])
+            # Call function to parse text
+            annotatedText = parseText(obj["data"][i]["text"])
 
-                # Add data to array
-                tweets.append({
-                    "text": annotatedText,
-                    "name": userObj["data"]["name"],
-                    "username": userObj["data"]["username"],
-                    "profile_image_url": userObj["data"]["profile_image_url"],
-                    "profile_url": "https://twitter.com/"+userObj["data"]["username"],
-                    "tweet_url": "https://twitter.com/"+userObj["data"]["username"]+"/status/"+obj["data"][i]["id"],
-                    "verified": userObj["data"]["verified"]
-                })
+            # Add data to array
+            tweets.append({
+                "text": annotatedText,
+                "name": userObj["data"]["name"],
+                "username": userObj["data"]["username"],
+                "profile_image_url": userObj["data"]["profile_image_url"],
+                "profile_url": "https://twitter.com/"+userObj["data"]["username"],
+                "tweet_url": "https://twitter.com/"+userObj["data"]["username"]+"/status/"+obj["data"][i]["id"],
+                "verified": userObj["data"]["verified"]
+            })
+    except:
+        # Print error message
+        print("Failed to get tweets. Trying again...")
 
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get tweets. Trying again...")
-
+    # Return tweets
     return tweets
 
 # Check if module is used as script
