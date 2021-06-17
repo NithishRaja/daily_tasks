@@ -55,6 +55,7 @@ class App:
                 "day": [2021, 1, 1, 1],
                 "quote": [2021, 1, 1, 1],
                 "song": [2021, 1, 1, 1],
+                "events": [2021, 1, 1],
                 "score": {
                     "date": "20210101",
                     "status": False

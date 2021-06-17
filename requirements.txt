@@ -1,5 +1,8 @@
 # Package for HTTP requests
 requests
 
+# Package to parse calendar
+ics
+
 # Package for parsing HTML
 bs4

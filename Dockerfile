@@ -3,29 +3,27 @@ FROM python:3-slim
 
 # Create a python directory
 RUN mkdir /home/daily
+RUN mkdir /home/daily/data
 RUN mkdir /home/daily/src
 RUN mkdir /home/daily/www
+RUN mkdir /home/daily/www/js
+RUN mkdir /home/daily/userData
 
 # Set workdir
 WORKDIR /home/daily
 
 # Copy scripting code
-COPY ./src/quote.py /home/daily/src
-COPY ./src/day.py /home/daily/src/
-COPY ./src/song.py /home/daily/src/
-COPY ./src/tweet.py /home/daily/src/
-COPY ./src/score.py /home/daily/src/
-COPY ./src/app.py /home/daily/src/
-COPY ./index.py /home/daily
+COPY ./src/* /home/daily/src/
+COPY ./index.py /home/daily/
 
 # Copy UI code
-COPY ./www/index.html /home/daily/www
-COPY ./www/index.js /home/daily/www
-COPY ./www/index.css /home/daily/www
+COPY ./www/index.html /home/daily/www/
+COPY ./www/js/* /home/daily/www/js/
 COPY ./index.html /home/daily/
 
 # Copy configurations
 COPY ./README.md /home/daily
+COPY ./.dockerignore /home/daily
 COPY ./requirements.txt /home/daily
 COPY ./config.json /home/daily
 
@@ -36,6 +34,7 @@ COPY ./run.sh /home/daily
 RUN pip install -r requirements.txt
 
 # Expose volume
+VOLUME /home/daily/userData
 VOLUME /home/daily/data
 VOLUME /home/daily/credentials.json
 
