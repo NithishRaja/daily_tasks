@@ -6,7 +6,7 @@ let songCardTitle = ("song-card-title", {
 })
 
 let songCardButton = ("song-card-button", {
-  template: "<button type='button' class='btn btn-primary me-2' target='_blank' :href='link'>{{text}}</button>",
+  template: "<a class='btn btn-primary me-2' target='_blank' :href='link'>{{text}}</a>",
   props: ["text", "link"]
 })
 
