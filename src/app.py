@@ -30,13 +30,6 @@ class App:
         # Call function to read credentials
         self.readCredentials()
 
-        # Initialise threads
-        self.dayThread = threading.Thread(target=self.day, args=[])
-        self.quoteThread = threading.Thread(target=self.quote, args=[])
-        self.songThread = threading.Thread(target=self.song, args=[])
-        self.scoreThread = threading.Thread(target=self.score, args=[])
-        self.eventsThread = threading.Thread(target=self.events, args=[])
-
     def readConfig(self):
         # Read in configuration
         file = open("./config.json")
@@ -84,14 +77,6 @@ class App:
         self.credentials = json.load(file)
         # Close file
         file.close()
-
-    def start(self):
-        # Start threads
-        self.dayThread.start()
-        self.quoteThread.start()
-        self.songThread.start()
-        self.scoreThread.start()
-        self.eventsThread.start()
 
     # Function to update day cache, if day cache has expired
     def day(self):
