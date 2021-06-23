@@ -7,11 +7,16 @@
 import requests, json, sys
 
 # Function to parse and annotate tweet text
-def parseText(text):
-    # Remove trailing tweet url
-    text = text.split(" ")
-    text.pop()
-    text = " ".join(text)
+def parseText(text, urls):
+    # Switch to original URLs
+    for url in urls:
+        text = text.replace(url["url"], url["expanded_url"])
+    # Check if tweet has any URLs
+    if len(urls) > 0:
+        # Remove trailing tweet url
+        text = text.split(" ")
+        text.pop()
+        text = " ".join(text)
     # Initialise variable for annotated text
     annotatedText = []
     # Initialise temp variable to hold string
@@ -23,7 +28,7 @@ def parseText(text):
         # Check if previous string is text
         if flag:
             # Check if current character is hashtag
-            if text[j] == "#":
+            if text[j] == "#" or text[j] == "@":
                 if len(previous) > 0:
                     # Push previous into array
                     annotatedText.append({"text": previous, "type": "text"})
@@ -36,7 +41,7 @@ def parseText(text):
             if text[j] == " ":
                 if len(previous) > 0:
                     # Push previous into array
-                    annotatedText.append({"text": previous, "type": "hashtag"})
+                    annotatedText.append({"text": previous, "type": "special"})
                 # Reset previous
                 previous = ""
                 # Update flag
@@ -56,7 +61,7 @@ def getTweet(searchKey, token, count):
     # Initialise variable to hold tweets
     tweets = []
     # Check if count is within 1 to 10
-    if count > 10 or count < 1:
+    if int(count) > 10 or int(count) < 1:
         count = 3
 
     # Initialise base URL
@@ -74,7 +79,7 @@ def getTweet(searchKey, token, count):
         # Parse json
         obj = json.loads(res.text)
         # Iterate over results
-        for i in range(count):
+        for i in range(int(count)):
             # Get user id
             user = obj["data"][i]["author_id"]
             # Generate URL
@@ -86,7 +91,7 @@ def getTweet(searchKey, token, count):
             userObj = json.loads(res.text)
 
             # Call function to parse text
-            annotatedText = parseText(obj["data"][i]["text"])
+            annotatedText = parseText(obj["data"][i]["text"], obj["data"][i]["entities"]["urls"])
 
             # Add data to array
             tweets.append({
