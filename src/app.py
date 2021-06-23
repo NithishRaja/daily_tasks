@@ -13,6 +13,7 @@ from src.song import getSong
 from src.tweet import getTweet
 from src.score import getScore, getDate
 from src.events import getEvents
+from src.words import getWords
 
 class App:
     # Initialise constructor
@@ -52,7 +53,8 @@ class App:
                 "score": {
                     "date": "20210101",
                     "status": False
-                }
+                },
+                "words": [2021, 1, 1]
             }
             # Acquire lock
             self.cacheLock.acquire()
@@ -232,6 +234,37 @@ class App:
             file = open("./data/cache.json", "w")
             # Update cache with current time data
             self.cache["events"] = [currentTime.year, currentTime.month, currentTime.day]
+            # Write to file
+            json.dump(self.cache, file)
+            # Close file
+            file.close()
+            # Release lock
+            self.cacheLock.release()
+
+    # Function to get words
+    def words(self):
+        # Get time of last data update
+        lastUpdated = datetime(year=self.cache["words"][0], month=self.cache["words"][1], day=self.cache["words"][2])
+        # Get current time
+        currentDate = datetime(year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+
+        # Check if cache has expired
+        if not currentDate == lastUpdated:
+            # Call function to get day
+            words = getWords()
+            # Open file
+            file = open("./data/words.json", "w")
+            # Write to file
+            json.dump(words, file)
+            # Close file
+            file.close()
+
+            # Acquire lock
+            self.cacheLock.acquire()
+            # Update cache timer
+            file = open("./data/cache.json", "w")
+            # Update cache with current time data
+            self.cache["words"] = [currentDate.year, currentDate.month, currentDate.day]
             # Write to file
             json.dump(self.cache, file)
             # Close file

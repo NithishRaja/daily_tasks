@@ -16,6 +16,7 @@ quoteThread = threading.Thread(target=app.quote, args=[])
 songThread = threading.Thread(target=app.song, args=[])
 scoreThread = threading.Thread(target=app.score, args=[])
 eventsThread = threading.Thread(target=app.events, args=[])
+wordsThread = threading.Thread(target=app.words, args=[])
 
 # Start threads
 dayThread.start()
@@ -23,5 +24,6 @@ quoteThread.start()
 songThread.start()
 scoreThread.start()
 eventsThread.start()
+wordsThread.start()
 
 # app.start()
