@@ -5,6 +5,8 @@
 
 # Dependencies
 import requests, json
+from datetime import datetime
+import dateutil.parser
 
 # Initialise base URL
 baseURL = "http://data.nba.net/10s"
@@ -67,13 +69,28 @@ def extractGameData(links, scoreboard):
         # Append final score
         vTeamScore.append(game["vTeam"]["score"])
 
+        # Set clock based on status of game
+        if game["statusNum"] == 1:
+            # Calculate hours to game start
+            startTime = dateutil.parser.isoparse(game["startTimeUTC"])
+            currentTime = datetime.now()
+            # Set clock based on time to start
+            if startTime - currentTime < 1:
+                clock = "Starts in "+str(startTime.minute - currentTime.minute)+" mins"
+            else:
+                clock = "Starts in "+str(startTime.hour - currentTime.hour)+" hrs"
+        elif game["statusNum"] == 2:
+            clock = game["clock"]
+        else:
+            clock = "FINAL"
+
         # Append game data to array
         data["games"].append({
             "gameId": game["gameId"],
             "boxscoreURL": "https://global.nba.com/boxscore/#!/"+str(game["gameId"]),
             "title": title,
             "subtitle": subtitle,
-            "clock": game["clock"] if len(game["clock"]) > 0 else "--:--",
+            "clock": clock,
             "hTeam": {
                 "id": game["hTeam"]["teamId"],
                 "triCode": game["hTeam"]["triCode"],
