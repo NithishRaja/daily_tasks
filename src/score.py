@@ -5,7 +5,7 @@
 
 # Dependencies
 import requests, json
-from datetime import datetime
+from datetime import datetime, timedelta
 import dateutil.parser
 
 # Initialise base URL
@@ -72,13 +72,15 @@ def extractGameData(links, scoreboard):
         # Set clock based on status of game
         if game["statusNum"] == 1:
             # Calculate hours to game start
-            startTime = dateutil.parser.isoparse(game["startTimeUTC"])
+            startTime = dateutil.parser.isoparse(game["startTimeUTC"]).replace(tzinfo=None)
             currentTime = datetime.now()
             # Set clock based on time to start
-            if startTime - currentTime < 1:
-                clock = "Starts in "+str(startTime.minute - currentTime.minute)+" mins"
+            if startTime - currentTime < timedelta(seconds=3600):
+                diff = startTime.minute - currentTime.minute
+                clock = "Starts in "+str( diff if diff > 0 else (60+diff) )+" mins"
             else:
-                clock = "Starts in "+str(startTime.hour - currentTime.hour)+" hrs"
+                diff = startTime.hour - currentTime.hour
+                clock = "Starts in "+str( diff if diff > 0 else (24+diff) )+" hrs"
         elif game["statusNum"] == 2:
             clock = game["clock"]
         else:
