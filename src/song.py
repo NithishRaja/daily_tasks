@@ -6,6 +6,7 @@
 # Dependencies
 import requests, bs4, json
 import random, urllib
+import sys
 
 # Function to check if string is empty or has escape characters
 def checkString(s):
@@ -106,8 +107,14 @@ def getSong(key):
     artist = song.select(".chart-element__information__artist")[0].text
     # Call function to get video URL
     video = getVideo(title, artist, key)
+    # Process artist string
+    artistStr = artist.lower()
+    # Remove featured artists
+    artistStr = artistStr.split(" featuring ")[0]
+    # Remove 'x' when multiple artists are involved
+    artistStr = artistStr.replace(" x ", " ")
     # Call function to get song lyrics
-    lyrics = getLyrics(title, artist)
+    lyrics = getLyrics(title, artistStr)
     # Return song details
     return {
         "title": title,
@@ -124,7 +131,7 @@ def getSong(key):
 # Check if module is used as script
 if __name__ == "__main__":
     # Call function to get song
-    song = getSong()
+    song = getSong(sys.argv[1])
     # Print song details
     print(song["title"])
     print(song["artist"])
