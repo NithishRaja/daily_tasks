@@ -1,11 +1,23 @@
+#
+# File containing unit tests
+#
+#
+
+# Dependencies
 import unittest, json
-from src.day import getDay
-from src.quote import getQuote
-from src.song import getSong
-from src.tweet import getTweet
-from src.words import getWords
-from src.events import getEvents
-from src.score import getScore
+import sys
+
+# adding src directory to the system path
+sys.path.append('~/home/python/src/')
+
+# Local Dependencies
+from day import getDay
+from quote import getQuote
+from song import getSong
+from tweet import getTweet
+from words import getWords
+from events import getEvents
+from score import getScore
 
 # Read in credentials
 file = open("./credentials.json")
@@ -21,9 +33,9 @@ class TestStringMethods(unittest.TestCase):
 
     # Check output of getDay function
     def test_day(self):
-        day = getDay()
-        self.assertIs(type(day["text"]), type(""))
-        self.assertIs(type(day["link"]), type(""))
+        dayList = getDay(day=13, month=7)
+        # Check length of array
+        self.assertEqual(len(dayList), 6)
 
     # Check output of getQuote function
     def test_quote(self):
