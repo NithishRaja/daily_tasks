@@ -4,7 +4,7 @@
 #
 
 # Dependencies
-import unittest, json
+import unittest, json, bs4
 import sys
 
 # adding src directory to the system path
@@ -18,6 +18,7 @@ from tweet import getTweet
 from words import getWords
 from events import getEvents
 from score import getScore
+from helpers.sendRequests import send_request
 
 # Read in credentials
 file = open("./credentials.json")
@@ -29,7 +30,26 @@ file = open("./config.json")
 config = json.load(file)
 file.close()
 
-class TestStringMethods(unittest.TestCase):
+class TestHelperMethods(unittest.TestCase):
+    # Check sendRequest function
+    def test_send_request(self):
+        # Test for 200 status code
+        res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/200")
+        self.assertEqual(res["status"], 200)
+        # Test for 404 status code
+        res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/404")
+        self.assertEqual(res["status"], 404)
+        # Test for 500 status code
+        res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/500")
+        self.assertEqual(res["status"], 500)
+        # Test for JSON response
+        res = send_request()["JSON"]("http://data.nba.net/10s/prod/v2/today.json")
+        self.assertEqual(type(res["payload"]), type({}))
+        # Test for HTML response
+        res = send_request()["HTML"]("https://the-internet.herokuapp.com/status_codes/200")
+        self.assertEqual(type(res["payload"]), type( bs4.BeautifulSoup("", features="html.parser") ))
+
+class TestMethods(unittest.TestCase):
 
     # Check output of getDay function
     def test_day(self):
