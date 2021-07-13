@@ -31,21 +31,24 @@ config = json.load(file)
 file.close()
 
 class TestHelperMethods(unittest.TestCase):
-    # Check sendRequest function
-    def test_send_request(self):
-        # Test for 200 status code
+    # Check send_request function for 200 status code
+    def test_send_request_for_status_code_200(self):
         res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/200")
         self.assertEqual(res["status"], 200)
-        # Test for 404 status code
+    # Check send_request function for 404 status code
+    def test_send_request_for_status_code_404(self):
         res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/404")
         self.assertEqual(res["status"], 404)
-        # Test for 500 status code
+    # Check send_request function for 500 status code
+    def test_send_request_for_status_code_500(self):
         res = send_request()["RAW"]("https://the-internet.herokuapp.com/status_codes/500")
         self.assertEqual(res["status"], 500)
-        # Test for JSON response
+    # Check send_request function for JSON payload
+    def test_send_request_for_JSON_payload(self):
         res = send_request()["JSON"]("http://data.nba.net/10s/prod/v2/today.json")
         self.assertEqual(type(res["payload"]), type({}))
-        # Test for HTML response
+    # Check send_request function for HTML payload
+    def test_send_request_for_HTML_payload(self):
         res = send_request()["HTML"]("https://the-internet.herokuapp.com/status_codes/200")
         self.assertEqual(type(res["payload"]), type( bs4.BeautifulSoup("", features="html.parser") ))
 
