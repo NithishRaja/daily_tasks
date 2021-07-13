@@ -4,8 +4,7 @@
 #
 
 # Dependencies
-import requests, bs4
-import random, os
+import requests, bs4, os
 from datetime import date
 import sys
 

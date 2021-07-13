@@ -4,7 +4,7 @@
 #
 
 # Dependencies
-import json, threading, os
+import json, threading, os, random
 from datetime import datetime, timedelta
 # Local dependencies
 from src.day import getDay
@@ -92,7 +92,9 @@ class App:
         # Check if cache has expired
         if currentTime - lastUpdated > delta:
             # Call function to get day
-            day = getDay()
+            dayList = getDay()
+            # Select random day
+            day = dayList[ random.randint(0, len(dayList)-1) ]
             # Call function to get tweets
             tweets = getTweet(day["text"], self.credentials["twitter"]["BearerToken"], self.config["tweetCount"]["day"])
             # Add tweets to day object
