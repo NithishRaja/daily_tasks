@@ -4,9 +4,11 @@
 #
 
 # Dependencies
-import requests, bs4, os
+import os
 from datetime import date
 import sys
+# local Dependencies
+from helpers.sendRequests import send_request
 
 # Function to get current date's international day
 def getDay(day, month):
@@ -20,28 +22,21 @@ def getDay(day, month):
                        str(month).zfill(2),
                        str(day).zfill(2)
                       )
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get international day
-            res = requests.get(URL)
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-            # Get text
-            dayList = resHTML.select(".section__cards")[0].select(".card__title a")
-            # Iterate over list
-            for day in dayList:
-                data.append({
-                    "text": day.text,
-                    "link": day["href"]
-                })
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get day. Trying again...")
-            # Reset data array
-            data = []
+    # Initialise sender
+    sender = send_request()
+
+    # Call function to send request and get HTML response
+    res = sender["HTML"](URL)
+    # Check status code
+    if res["status"] == 200:
+        # Get list of HTML components with day info
+        dayList = res["payload"].select(".section__cards")[0].select(".card__title a")
+        # Extract data
+        for day in dayList:
+            data.append({
+                "text": day.text,
+                "link": day["href"]
+            })
     # Return data array
     return data
 

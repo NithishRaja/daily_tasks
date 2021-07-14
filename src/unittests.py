@@ -54,11 +54,23 @@ class TestHelperMethods(unittest.TestCase):
 
 class TestMethods(unittest.TestCase):
 
-    # Check output of getDay function
-    def test_day(self):
+    # Check output of getDay function for normal request
+    def test_day_normal_response(self):
+        # Initialise array to hold titles
+        titles = ["French Fries Day", "Cow Appreciation Day", "Beef Tallow Day", "International Rock Day", "Bubblegum Day", "Embrace Your Geekness Day"]
+        # Call function
         dayList = getDay(day=13, month=7)
         # Check length of array
         self.assertEqual(len(dayList), 6)
+        # Check elements of array
+        for item in dayList:
+            self.assertTrue(item["text"] in titles)
+    # Check output of getDay function for bad request
+    def test_day_empty_response(self):
+        # Call function with bad parameters
+        dayList = getDay(day=-1, month=-1)
+        # Check length of array
+        self.assertEqual(len(dayList), 0)
 
     # Check output of getQuote function
     def test_quote(self):
