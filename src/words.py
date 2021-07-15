@@ -20,6 +20,7 @@ class Words(Getter):
 
     # Function to get word from merriam webster
     def getMerriamWebsterWord(self):
+        """Send request to merriam webster site and scrape for 'word of the day'"""
         # Define word object
         word = None
         # Prepare URL
@@ -41,6 +42,7 @@ class Words(Getter):
 
     # Function to get word from dictionary
     def getDictionaryWord(self):
+        """Send request to dictionary site and scrape for 'word of the day'"""
         # Define word object
         word = None
         # Prepare URL
@@ -62,6 +64,11 @@ class Words(Getter):
         return word
 
     def getMeaning(self, word):
+        """Send request to merriam webster site and scrape for meaning of given word.
+
+        Keyword Arguments:
+        word -- string
+        """
         # Initialise array to hold results
         data = []
         # Prepare URL
@@ -79,6 +86,7 @@ class Words(Getter):
         return data
 
     def getData(self):
+        """Function to call functions to get 'words of the day' and their meanings."""
         # Initialise array to hold words
         data = []
         # Call function to get word from merriam webster
