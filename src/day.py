@@ -8,7 +8,7 @@ import os
 from datetime import date
 import sys
 # local Dependencies
-from helpers.sendRequests import send_request
+from helpers.requestFactory import requestFactory
 
 # Function to get current date's international day
 def getDay(day, month):
@@ -23,7 +23,7 @@ def getDay(day, month):
                        str(day).zfill(2)
                       )
     # Initialise sender
-    sender = send_request()
+    sender = requestFactory()
 
     # Call function to send request and get HTML response
     res = sender["HTML"](URL)

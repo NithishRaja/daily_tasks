@@ -7,7 +7,7 @@
 import os
 # Local Dependencies
 from getter import Getter
-from helpers.sendRequests import send_request
+from helpers.requestFactory import requestFactory
 
 class Words(Getter):
     # Define constructor
@@ -16,7 +16,7 @@ class Words(Getter):
         self.merriam_webster_url = "https://www.merriam-webster.com"
         self.dictionary_url = "https://www.dictionary.com"
         # Initialise sender
-        self.sender = send_request()
+        self.sender = requestFactory()
 
     # Function to get word from merriam webster
     def getMerriamWebsterWord(self):

@@ -13,7 +13,6 @@ from tweet import getTweet
 from words import Words
 from events import getEvents
 from score import getScore
-from helpers.sendRequests import send_request
 
 # Read in credentials
 file = open("./credentials.json")
