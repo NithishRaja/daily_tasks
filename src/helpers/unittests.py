@@ -8,7 +8,7 @@ import unittest, bs4
 # Local Dependencies
 from sendRequests import send_request
 
-# Test class
+# Test class for helper functions
 class TestHelperMethods(unittest.TestCase):
     # Set up function
     def setUp(self):

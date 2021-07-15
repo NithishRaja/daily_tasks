@@ -10,7 +10,7 @@ from day import getDay
 from quote import getQuote
 from song import getSong
 from tweet import getTweet
-from words import getWords
+from words import Words
 from events import getEvents
 from score import getScore
 from helpers.sendRequests import send_request
@@ -23,10 +23,10 @@ file.close()
 # Read in credentials
 file = open("./config.json")
 config = json.load(file)
+quote = getQuote()
 file.close()
 
-class TestMethods(unittest.TestCase):
-
+class TestDayMethods(unittest.TestCase):
     # Check output of getDay function for normal request
     def test_day_normal_response(self):
         # Initialise array to hold titles
@@ -45,9 +45,63 @@ class TestMethods(unittest.TestCase):
         # Check length of array
         self.assertEqual(len(dayList), 0)
 
+class TestWordMethods(unittest.TestCase):
+    # Set up function
+    def setUp(self):
+        # Initialise word object
+        self.wordObj = Words()
+    # Check output of words class for normal request
+    def test_words_normal_response(self):
+        # Call function to get data
+        words = self.wordObj.getData()
+        # Check number of words returned
+        self.assertEqual(len(words), 2)
+        for item in words:
+            self.assertEqual(type(item["word"]), type(""))
+            self.assertEqual(type(item["pronunciation"]), type(""))
+            self.assertEqual(type(item["wordType"]), type(""))
+            self.assertTrue(len(item["meaning"]) > 0)
+    # Check output of words class for bad request
+    def test_words_failed_response(self):
+        # Initialise word object
+        wordObj = Words()
+        # Update URLs
+        wordObj.merriam_webster_url = "https://the-internet.herokuapp.com/status_codes/404"
+        wordObj.dictionary_url = "https://the-internet.herokuapp.com/status_codes/404"
+        # Call function to get data
+        words = wordObj.getData()
+        # Check number of objects returned
+        self.assertEqual(len(words), 0)
+    # Check output of getMeaning for successful request
+    def test_getMeaning_for_normal_response(self):
+        # Initialise array of meanings
+        meanings = [': to destroy to the ground : demolish', ': to scrape, cut, or shave off', ': erase']
+        # Call function to get meanings
+        data = self.wordObj.getMeaning("raze")
+        # Check number of entries in data returned
+        self.assertEqual(len(data), 3)
+        # Check data
+        for item in data:
+            self.assertTrue(item in meanings)
+    # Check output of getMeaning for bad request
+    def test_getMeaning_for_bad_response(self):
+        # Call function to get meanings
+        data = self.wordObj.getMeaning("hoping this is not a word")
+        self.assertEqual(len(data), 0)
+    # Check output of getMeaning for failed request
+    def test_getMeaning_for_no_response(self):
+        wordObj = Words()
+        wordObj.merriam_webster_url = "https://the-internet.herokuapp.com/status_codes/404"
+        # Call function to get meanings
+        data = wordObj.getMeaning("does not matter")
+        self.assertEqual(len(data), 0)
+    # Tear down function
+    def tearDown(self):
+        del self.wordObj
+
+class TestMethods(unittest.TestCase):
     # Check output of getQuote function
     def test_quote(self):
-        quote = getQuote()
         self.assertIs(type(quote["topic"]), type(""))
         self.assertIs(type(quote["quote"]), type(""))
         self.assertIs(type(quote["author"]), type(""))
@@ -73,16 +127,6 @@ class TestMethods(unittest.TestCase):
             self.assertIs(type(item["profile_image_url"]), type(""))
             self.assertIs(type(item["profile_url"]), type(""))
             self.assertIs(type(item["tweet_url"]), type(""))
-
-    # Check output of getWords function
-    def test_words(self):
-        words = getWords()
-        self.assertEqual(len(words), 2)
-        for item in words:
-            self.assertIs(type(item["word"]), type(""))
-            self.assertIs(type(item["pronunciation"]), type(""))
-            self.assertIs(type(item["wordType"]), type(""))
-            self.assertIs(type(item["meaning"]), type([]))
 
     # Check output of getEvents function
     def test_events(self):

@@ -1,105 +1,101 @@
 #
-# File to get words of the day
+# File containing class to get words of the day
 #
 #
 
 # Dependencies
-import requests, bs4, os
+import os
+# Local Dependencies
+from getter import Getter
+from helpers.sendRequests import send_request
 
-# Initialise global variables
-baseURL1 = "https://www.merriam-webster.com"
-baseURL2 = "https://www.dictionary.com"
+class Words(Getter):
+    # Define constructor
+    def __init__(self):
+        # Initialise URLs
+        self.merriam_webster_url = "https://www.merriam-webster.com"
+        self.dictionary_url = "https://www.dictionary.com"
+        # Initialise sender
+        self.sender = send_request()
 
-# Function to get meaning of word
-def getMeaning(word):
-    # Initialise array to hold results
-    data = []
-    try:
-        # Send request to get meaning of word
-        res = requests.get(os.path.join(baseURL1, "dictionary", word))
-        # Parse HTML
-        resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-        # Get text
-        meaningList = resHTML.select("#dictionary-entry-1 .dtText")
-        # Append meaning to array
-        for item in meaningList:
-            data.append(item.text)
-    except:
-        # Print error message
-        print("Failed to get meaning of "+word)
-    # Return data
-    return data
+    # Function to get word from merriam webster
+    def getMerriamWebsterWord(self):
+        # Define word object
+        word = None
+        # Prepare URL
+        URL = os.path.join(self.merriam_webster_url, "word-of-the-day")
+        # Call function to send request and get HTML response
+        res = self.sender["HTML"](URL)
+        # Check status code
+        if res["status"] == 200:
+            # Initialise word object
+            word = {}
+            # Extract word
+            word["word"] = res["payload"].select(".word-and-pronunciation h1")[0].text
+            # Extract data about word
+            temp = res["payload"].select(".word-attributes")[0]
+            word["wordType"] = temp.select(".main-attr")[0].text
+            word["pronunciation"] = temp.select(".word-syllables")[0].text
+        # Return word object
+        return word
 
-# Function to get current date's international day
-def getWords():
-    # Initialise array to store data
-    data = []
+    # Function to get word from dictionary
+    def getDictionaryWord(self):
+        # Define word object
+        word = None
+        # Prepare URL
+        URL = os.path.join(self.dictionary_url, "e", "word-of-the-day")
+        # Call function to send request and get HTML response
+        res = self.sender["HTML"](URL)
+        # Check status code
+        if res["status"] == 200:
+            # Initialise word object
+            word = {}
+            # Extract word
+            temp = res["payload"].select(".otd-item-headword")[0]
+            word["word"] = temp.select(".otd-item-headword__word h1")[0].text
+            # Extract data about word
+            word["wordType"] = temp.select(".otd-item-headword__pos p")[0].text.replace("\n", "").replace(" ", "")
+            pronunciation = temp.select(".otd-item-headword__pronunciation")[0].text
+            word["pronunciation"] = pronunciation.replace("\n", "").replace(" ", "").replace("[", "").replace("]", "")
+        # Return word object
+        return word
 
-    # Prepare URL
-    URL1 = os.path.join(baseURL1, "word-of-the-day")
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get word from webster
-            res = requests.get(URL1)
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-            # Get word
-            word = resHTML.select(".word-and-pronunciation h1")[0].text
-            # Get syllables and word pronunciation
-            wordAttrs = resHTML.select(".word-attributes")[0]
-            wordType = wordAttrs.select(".main-attr")[0].text
-            pronunciation = wordAttrs.select(".word-syllables")[0].text
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get word from webster. Trying again...")
+    def getMeaning(self, word):
+        # Initialise array to hold results
+        data = []
+        # Prepare URL
+        URL = os.path.join(self.merriam_webster_url, "dictionary", word)
+        # Call function to send request and get HTML response
+        res = self.sender["HTML"](URL)
+        # Check status code
+        if res["status"] == 200:
+            # Get text
+            meaningList = res["payload"].select("#dictionary-entry-1 .dtText")
+            # Append meaning to array
+            for item in meaningList:
+                data.append(item.text)
+        # Return list of meanings
+        return data
 
-    # Append object to data
-    data.append({
-        "word": word,
-        "pronunciation": pronunciation,
-        "wordType": wordType,
-        "meaning": getMeaning(word)
-    })
-
-    # Prepare URL
-    URL2 = os.path.join(baseURL2, "e", "word-of-the-day")
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get word from webster
-            res = requests.get(URL2)
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-            # Get word
-            wordBlock = resHTML.select(".otd-item-headword")[0]
-            word = wordBlock.select(".otd-item-headword__word h1")[0].text
-            # Get syllables and word pronunciation
-            pronunciation = wordBlock.select(".otd-item-headword__pronunciation")[0].text
-            pronunciation = pronunciation.replace("\n", "").replace(" ", "").replace("[", "").replace("]", "")
-            wordType = wordBlock.select(".otd-item-headword__pos p")[0].text.replace("\n", "").replace(" ", "")
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get word from dictionary.com. Trying again...")
-
-    # Append object to data
-    data.append({
-        "word": word,
-        "pronunciation": pronunciation,
-        "wordType": wordType,
-        "meaning": getMeaning(word)
-    })
-
-    # Return data
-    return data
-
-# Check if module is used as script
-if __name__ == "__main__":
-    # Call function to get words
-    words = getWords()
-    # Print day
-    print(words)
+    def getData(self):
+        # Initialise array to hold words
+        data = []
+        # Call function to get word from merriam webster
+        word = self.getMerriamWebsterWord()
+        # Check if word is not None
+        if not word == None:
+            # Call function to get meaning
+            word["meaning"] = self.getMeaning(word["word"])
+            # Append word to list
+            data.append(word)
+        # Call function to get word from dictionary
+        word = self.getDictionaryWord()
+        # Check if word is not None
+        if not word == None:
+            # Call function to get meaning of word
+            word["meaning"] = self.getMeaning(word["word"])
+            # Append word to list
+            data.append(word)
+        # Return list of words
+        return data
