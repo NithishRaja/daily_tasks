@@ -6,7 +6,7 @@
 # Dependencies
 import unittest, json
 # Local Dependencies
-from day import getDay
+from day import Day
 from quote import getQuote
 from song import getSong
 from tweet import getTweet
@@ -26,12 +26,24 @@ quote = getQuote()
 file.close()
 
 class TestDayMethods(unittest.TestCase):
+    # Set up function
+    def setUp(self):
+        # Initialise day object
+        self.dayObj = Day()
     # Check output of getDay function for normal request
     def test_day_normal_response(self):
+        # Call function to get data
+        dayList = self.dayObj.getData()
+        # Check length of array
+        self.assertTrue(len(dayList) > 0)
+    # Check output of getDay function for normal specified request
+    def test_day_specified_date(self):
         # Initialise array to hold titles
         titles = ["French Fries Day", "Cow Appreciation Day", "Beef Tallow Day", "International Rock Day", "Bubblegum Day", "Embrace Your Geekness Day"]
-        # Call function
-        dayList = getDay(day=13, month=7)
+        # Call function to set date
+        self.dayObj.setDate(day=13, month=7)
+        # Call function to get data
+        dayList = self.dayObj.getData()
         # Check length of array
         self.assertEqual(len(dayList), 6)
         # Check elements of array
@@ -39,10 +51,15 @@ class TestDayMethods(unittest.TestCase):
             self.assertTrue(item["text"] in titles)
     # Check output of getDay function for bad request
     def test_day_empty_response(self):
-        # Call function with bad parameters
-        dayList = getDay(day=-1, month=-1)
+        # Call function to set date
+        self.dayObj.setDate(day=-1, month=-1)
+        # Call function to get data
+        dayList = self.dayObj.getData()
         # Check length of array
         self.assertEqual(len(dayList), 0)
+    # Tear down function
+    def tearDown(self):
+        del self.dayObj
 
 class TestWordMethods(unittest.TestCase):
     # Set up function
