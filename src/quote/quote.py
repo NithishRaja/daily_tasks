@@ -4,7 +4,10 @@
 #
 
 # Dependencies
-import os
+import os, sys
+
+sys.path.append(os.path.abspath(os.path.join("src")))
+
 # Local Dependencies
 from helpers.requestFactory import requestFactory
 

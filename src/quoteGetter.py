@@ -7,7 +7,7 @@
 import random
 # Local Dependencies
 from getter import Getter
-from quote import Quote
+from quote.quote import Quote
 
 class QuoteGetter(Getter):
     def __init__(self):
