@@ -1,101 +1,113 @@
 #
-# File to get quote
+# File containing class to get Quote
 #
 #
 
 # Dependencies
-import requests, bs4
-import random
+import os
+# Local Dependencies
+from helpers.requestFactory import requestFactory
 
-# Initialise baseURL for quotes
-quotesURL = "https://www.brainyquote.com"
+# Initialise class
+class Quote:
+    # Initialise constructor
+    def __init__(self):
+        # Set baseURL
+        self.baseURL = "https://www.brainyquote.com"
+        # Initialise sender
+        self.sender = requestFactory()
 
-# Function to get topic index
-def getTopicIndex():
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get topics index
-            res = requests.get(quotesURL+"/topics")
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-            # Get text
-            index = resHTML.select(".bq_s .bq_fl .bqLn a")
-            # Select random index
-            indexURL = index[ random.randint(0, len(index)-1) ]["href"]
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get quote topic index. Trying again...")
-    # Return indexURL
-    return indexURL
+    # Function to get quote topics index
+    def getTopicIndex(self):
+        """Function to scrape baseURL for compressed quote topics list"""
+        # Initialise array for index
+        topicIndex = []
+        # Send request
+        res = self.sender["HTML"](os.path.join(self.baseURL, "topics"))
+        # Check response status
+        if res["status"] == 200:
+            # Get compressed list of topics
+            temp = res["payload"].select(".bq_s .bq_fl .bqLn a")
+            # Extract name and href
+            for item in temp:
+                topicIndex.append({
+                    "name": item.text,
+                    "href": item["href"]
+                })
+        # Return list
+        return topicIndex
 
-# Function to get specific topic
-def getTopic():
-    # Call function to get topic index
-    indexURL = getTopicIndex()
+    # Function to get list of quote topics
+    def getTopicList(self, indexURL):
+        """Function to scrape baseURL+indexURL for selected quote topics.
 
-    # Iterate till success
-    while(True):
-        try:
-            # Send request to get topics
-            res = requests.get(quotesURL+indexURL)
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
-            # Get topics list
-            topicList = resHTML.select(".bqLn a")
-            # Select random topic
-            topic = topicList[ random.randint(0, len(topicList)-1) ]
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get quote topic. Trying again...")
+        Keyword Arguments:
+        indexURL -- string
+        """
+        # Initialise array to hold topics
+        topics = []
+        # Prepare URL
+        URL = self.baseURL + indexURL
+        # Send request
+        res = self.sender["HTML"](URL)
+        # Check response status
+        if res["status"] == 200:
+            # Get list of topics
+            temp = res["payload"].select(".bqLn a")
+            # Extract name and href
+            for item in temp:
+                topics.append({
+                    "name": item.text,
+                    "href": item["href"]
+                })
+        # Return list
+        return topics
 
-    # Return topicURL and topic
-    return {
-        "url": topic["href"],
-        "text": topic.text
-    }
+    # Function to get quote data
+    def getQuoteDataByURL(self, topicURL):
+        """Function to scrape baseURL+topicURL for quotes.
 
-# Function to get a quote at random
-def getQuote():
-    # Iterate till success
-    while(True):
-        try:
-            # Call function to get topic
-            topic = getTopic()
-            # Send request to get topics index
-            res = requests.get(quotesURL+topic["url"])
-            # Parse HTML
-            resHTML = bs4.BeautifulSoup(res.text, features="html.parser")
+        Keyword Arguments:
+        topicURL -- string
+        """
+        # Initialise array to hold quote data
+        quotes = []
+        # Prepare URL
+        URL = self.baseURL + topicURL
+        # Send request
+        res = self.sender["HTML"](URL)
+        # Check response status
+        if res["status"] == 200:
+            # Get list of topics
+            temp = res["payload"].select(".bqLn a")
             # Get quote list
-            quoteList = resHTML.select("#quotesList .bqQt")
-            # Select random quote
-            quote = quoteList[ random.randint(0, len(quoteList)-1) ]
-            # Exit loop
-            break
-        except:
-            # Print error message
-            print("Failed to get quote. Trying again...")
+            quoteList = res["payload"].select("#quotesList .bqQt")
+            # Iterate over all quotes
+            for item in quoteList:
+                # Append quote data to list
+                quotes.append({
+                    "text": item.find("a", {"title": "view quote"}).text,
+                    "author": item.find("a", {"title": "view author"}).text
+                })
+        # Return quote list
+        return quotes
 
-    # Get quote text
-    quoteText = quote.find("a", {"title": "view quote"}).text
-    # Get quote author
-    quoteAuthor = quote.find("a", {"title": "view author"}).text
-    # Return topic, quote and author
-    return {
-        "topic": topic["text"],
-        "quote": quoteText,
-        "author": quoteAuthor
-    }
+    # Function to get quote data
+    def getQuoteDataByTopic(self, topic):
+        """Function to prepeare URL for given topic and call getQuoteDataByURL.
 
-# Check if module is used as script
+        Keyword Arguments:
+        topic -- string
+        """
+        # Generate quote URL
+        topicURL = "/topics/"+topic.lower()+"-quotes"
+        # Call function to get list of quotes
+        quotes = self.getQuoteDataByURL(topicURL)
+        # Return list
+        return quotes
+
 if __name__ == "__main__":
-    # Call function to get quote
-    quote = getQuote()
-    # Print quote
-    print(quote["topic"])
-    print(quote["quote"])
-    print(quote["author"])
+    obj = Quote()
+    index = obj.getTopicIndex()
+    print(index[0])
+    print(len(index))
