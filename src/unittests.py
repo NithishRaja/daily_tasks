@@ -8,7 +8,7 @@ import unittest, json
 # Local Dependencies
 from day import Day
 from quoteGetter import QuoteGetter
-from song import getSong
+from songGetter import SongGetter
 from tweet import getTweet
 from words import Words
 from events import getEvents
@@ -133,16 +133,34 @@ class TestQuoteGetterMethods(unittest.TestCase):
     def tearDown(self):
         del self.quoteGetterObj
 
-class TestMethods(unittest.TestCase):
-    # Check output of getSong function
-    def test_song(self):
-        song = getSong(credentials["youtube"]["APIKey"])
-        self.assertIs(type(song["title"]), type(""))
-        self.assertIs(type(song["artist"]), type(""))
-        self.assertIs(type(song["info"]), type([]))
-        self.assertIs(type(song["lyrics"]), type([]))
-        self.assertIs(type(song["video"]), type({}))
+class TestSongGetterMethods(unittest.TestCase):
+    # Set up fuction
+    def setUp(self):
+        self.songGetterObj = SongGetter()
+    # Check song getter for successful request
+    def test_song_getter_getData_on_success(self):
+        # Initialise list of fileds in song data
+        quoteFields = ["title", "artist", "info", "lyrics"]
+        # Call function to get song data
+        res = self.songGetterObj.getData()
+        # Check response type
+        self.assertIs(type(res), type({}))
+        # Check fields of object
+        for item in res.keys():
+            self.assertTrue(item in quoteFields)
+    # Check song getter for failed request
+    def test_song_getter_getData_on_failure(self):
+        songGetterObj = SongGetter()
+        songGetterObj.songList = []
+        # Call function to get song data
+        res = songGetterObj.getData()
+        # Check response
+        self.assertEqual(res, {})
+    # Tear down function
+    def tearDown(self):
+        del self.songGetterObj
 
+class TestMethods(unittest.TestCase):
     # Check output of getTweet function
     def test_tweet(self):
         count = 1
