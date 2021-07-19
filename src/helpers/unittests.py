@@ -6,13 +6,13 @@
 # Dependencies
 import unittest, bs4
 # Local Dependencies
-from requestFactory import requestFactory
+from requestFacade import requestFacade
 
 # Test class for helper functions
 class TestHelperMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
-        self.sender = requestFactory()
+        self.sender = requestFacade()
     # Check send_request function for 200 status code
     def test_send_request_for_status_code_200(self):
         res = self.sender["RAW"]("https://the-internet.herokuapp.com/status_codes/200")

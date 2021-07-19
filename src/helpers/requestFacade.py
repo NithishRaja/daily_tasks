@@ -76,7 +76,7 @@ def parse_HTML(url):
     return res
 
 # Function to return dict of above functions
-def requestFactory():
+def requestFacade():
     return {
         "RAW": send,
         "JSON": parse_JSON,

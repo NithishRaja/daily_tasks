@@ -7,7 +7,7 @@
 import os
 from datetime import date
 # local Dependencies
-from helpers.requestFactory import requestFactory
+from helpers.requestFacade import requestFacade
 from getter import Getter
 
 class Day(Getter):
@@ -22,7 +22,7 @@ class Day(Getter):
             "year": date.today().year
         }
         # Initialise sender
-        self.sender = requestFactory()
+        self.sender = requestFacade()
 
     # Function to set the date
     def setDate(self, day, month):

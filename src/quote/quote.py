@@ -9,7 +9,7 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
-from helpers.requestFactory import requestFactory
+from helpers.requestFacade import requestFacade
 
 # Initialise class
 class Quote:
@@ -18,7 +18,7 @@ class Quote:
         # Set baseURL
         self.baseURL = "https://www.brainyquote.com"
         # Initialise sender
-        self.sender = requestFactory()
+        self.sender = requestFacade()
 
     # Function to get quote topics index
     def getTopicIndex(self):
