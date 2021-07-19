@@ -118,8 +118,8 @@ class TestQuoteGetterMethods(unittest.TestCase):
     # Set up fuction
     def setUp(self):
         self.quoteGetterObj = QuoteGetter()
-    # Check quote getter
-    def test_quote_getter_get_data(self):
+    # Check quote getter for successful request
+    def test_quote_getter_getData_on_success(self):
         # Initialise list of fileds in quote data
         quoteFields = ["text", "topic", "author"]
         # Call function to get quote data
@@ -129,6 +129,21 @@ class TestQuoteGetterMethods(unittest.TestCase):
         # Check fields of object
         for item in res.keys():
             self.assertTrue(item in quoteFields)
+    # Check quote getter for failed request
+    def test_quote_getter_getData_on_failure(self):
+        # Initialise default quote object
+        defaultQuote = {
+            "text": "To refactor or to start from scratch?",
+            "author": "Cocoa Puffs",
+        }
+        # Initialise quoteGetter object
+        quoteGetterObj = QuoteGetter()
+        quoteGetterObj.quoteList = []
+        # Call function to get quote data
+        res = quoteGetterObj.getData()
+        # Check response
+        for item in defaultQuote.keys():
+            self.assertEqual(res[item], defaultQuote[item])
     # Tear down function
     def tearDown(self):
         del self.quoteGetterObj

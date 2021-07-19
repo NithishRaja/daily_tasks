@@ -18,15 +18,15 @@ class QuoteGetter(Getter):
         # Initialise array to hold topic list
         self.topicList = []
         # Initialise variable to hold selected topic
-        self.selectedTopic = "One of Many"
+        self.selectedTopic = ""
         # Initialise array to hold quote list
-        self.quoteList = [{
+        self.quoteList = []
+        # Initialise default quote
+        self.defaultQuote = {
             "text": "To refactor or to start from scratch?",
-            "Author": "Cocoa Puffs"
-        }]
-        # Initialise variables for retries
-        self.maxRetries = 3
-        self.retryCount = 0
+            "author": "Cocoa Puffs"
+        }
+
         # Call function to fill topic index
         self.populateTopicIndexList()
         # Call function to fill topic list
@@ -36,62 +36,40 @@ class QuoteGetter(Getter):
 
     # Function to get topic index list
     def populateTopicIndexList(self):
-        """Calls Quote.getTopicIndex and stores it, retries upon empty list."""
-        # Iterate upon failure
-        while self.retryCount < self.maxRetries:
-            # Call function to get topic index
-            self.topicIndexList = self.quote.getTopicIndex()
-            # Check length of list
-            if len(self.topicIndexList) > 0:
-                break
-            else:
-                # Increment retry count upon failure
-                self.retryCount = self.retryCount + 1
+        """Calls Quote.getTopicIndex and stores it."""
+        # Call function to get topic index
+        self.topicIndexList = self.quote.getTopicIndex()
 
     # Function to get topic list
     def populateTopicList(self):
-        """Selects a random topic index and stores it, retries upon empty list."""
+        """Selects a random topic index and stores it."""
         # Check length of topic index list
         if not len(self.topicIndexList) == 0:
-            # Iterate upon failure
-            while self.retryCount < self.maxRetries:
-                # Select random topic index
-                temp = self.topicIndexList[ random.randint(0, len(self.topicIndexList)-1) ]
-                # Call function to get topic list
-                self.topicList = self.quote.getTopicList( temp["href"] )
-                # Check length of list
-                if len(self.topicList) > 0:
-                    break
-                else:
-                    # Increment retry count upon failure
-                    self.retryCount = self.retryCount + 1
+            # Select random topic index
+            temp = self.topicIndexList[ random.randint(0, len(self.topicIndexList)-1) ]
+            # Call function to get topic list
+            self.topicList = self.quote.getTopicList( temp["href"] )
 
     # Function to get quote list
     def populateQuoteList(self):
         """Gets a list of quotes for a randomly selected topic."""
-        # Check length of topic index list
-        if not len(self.topicList) == 0:
-            # Iterate upon failure
-            while self.retryCount < self.maxRetries:
-                # Select a random topic
-                temp = self.topicList[ random.randint(0, len(self.topicList)-1) ]
-                self.selectedTopic = temp["name"]
-                # Call function to get topic list
-                res = self.quote.getQuoteDataByURL( temp["href"] )
-                # Check length of list
-                if len(res) > 0:
-                    self.quoteList = res
-                    break
-                else:
-                    # Increment retry count upon failure
-                    self.retryCount = self.retryCount + 1
+        # Select a random topic
+        temp = self.topicList[ random.randint(0, len(self.topicList)-1) ]
+        # Set selected topic
+        self.selectedTopic = temp["name"]
+        # Call function to get topic list
+        self.quoteList = self.quote.getQuoteDataByURL( temp["href"] )
 
     # Function to get a random quote
     def getData(self):
         """Selects a random quote from list."""
-        # Get a random quote
-        temp = self.quoteList[ random.randint(0, len(self.quoteList)-1) ]
+        # Initialise variable for quote
+        quote = self.defaultQuote
+        # Check if quote list is empty
+        if not len(self.quoteList) == 0:
+            # Get a random quote
+            quote = self.quoteList[ random.randint(0, len(self.quoteList)-1) ]
         # Add topic to quote
-        temp["topic"] = self.selectedTopic
+        quote["topic"] = self.selectedTopic
         # Return selected quote
-        return temp
+        return quote
