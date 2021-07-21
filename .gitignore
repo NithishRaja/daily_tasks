@@ -22,3 +22,5 @@ credentials.json
 
 # Ignore calendar files
 *.ics
+!default.ics
+!empty.ics
