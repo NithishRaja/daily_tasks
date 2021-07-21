@@ -9,9 +9,9 @@ import unittest, json
 from day import Day
 from quoteGetter import QuoteGetter
 from songGetter import SongGetter
+from eventGetter import EventGetter
 from tweet import getTweet
 from words import Words
-from events import getEvents
 from score import getScore
 
 # Read in credentials
@@ -175,6 +175,18 @@ class TestSongGetterMethods(unittest.TestCase):
     def tearDown(self):
         del self.songGetterObj
 
+class TestEventGetterMethods(unittest.TestCase):
+    # Set up fuction
+    def setUp(self):
+        self.eventGetterObj = EventGetter()
+    # Check get data
+    def test_event_getter_getData(self):
+        # Check response
+        self.assertEqual(type(self.eventGetterObj.getData()), type([]))
+    # Tear down function
+    def tearDown(self):
+        del self.eventGetterObj
+
 class TestMethods(unittest.TestCase):
     # Check output of getTweet function
     def test_tweet(self):
@@ -188,11 +200,6 @@ class TestMethods(unittest.TestCase):
             self.assertIs(type(item["profile_image_url"]), type(""))
             self.assertIs(type(item["profile_url"]), type(""))
             self.assertIs(type(item["tweet_url"]), type(""))
-
-    # Check output of getEvents function
-    def test_events(self):
-        events = getEvents(config["calendar"]["fileName"], config["calendar"]["upperLimit"], config["calendar"]["lowerLimit"])
-        self.assertEqual(type(events), type([]))
 
     # Check output of getScore function
     def test_score(self):
