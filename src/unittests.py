@@ -11,7 +11,7 @@ from quoteGetter import QuoteGetter
 from songGetter import SongGetter
 from eventGetter import EventGetter
 from tweet import getTweet
-from words import Words
+from wordGetter import WordGetter
 from scoreGetter import ScoreGetter
 
 # Read in credentials
@@ -59,60 +59,6 @@ class TestDayMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.dayObj
-
-class TestWordMethods(unittest.TestCase):
-    # Set up function
-    def setUp(self):
-        # Initialise word object
-        self.wordObj = Words()
-    # Check output of words class for normal request
-    def test_words_normal_response(self):
-        # Call function to get data
-        words = self.wordObj.getData()
-        # Check number of words returned
-        self.assertEqual(len(words), 2)
-        for item in words:
-            self.assertEqual(type(item["word"]), type(""))
-            self.assertEqual(type(item["pronunciation"]), type(""))
-            self.assertEqual(type(item["wordType"]), type(""))
-            self.assertTrue(len(item["meaning"]) > 0)
-    # Check output of words class for bad request
-    def test_words_failed_response(self):
-        # Initialise word object
-        wordObj = Words()
-        # Update URLs
-        wordObj.merriam_webster_url = "https://the-internet.herokuapp.com/status_codes/404"
-        wordObj.dictionary_url = "https://the-internet.herokuapp.com/status_codes/404"
-        # Call function to get data
-        words = wordObj.getData()
-        # Check number of objects returned
-        self.assertEqual(len(words), 0)
-    # Check output of getMeaning for successful request
-    def test_getMeaning_for_normal_response(self):
-        # Initialise array of meanings
-        meanings = [': to destroy to the ground : demolish', ': to scrape, cut, or shave off', ': erase']
-        # Call function to get meanings
-        data = self.wordObj.getMeaning("raze")
-        # Check number of entries in data returned
-        self.assertEqual(len(data), 3)
-        # Check data
-        for item in data:
-            self.assertTrue(item in meanings)
-    # Check output of getMeaning for bad request
-    def test_getMeaning_for_bad_response(self):
-        # Call function to get meanings
-        data = self.wordObj.getMeaning("hoping this is not a word")
-        self.assertEqual(len(data), 0)
-    # Check output of getMeaning for failed request
-    def test_getMeaning_for_no_response(self):
-        wordObj = Words()
-        wordObj.merriam_webster_url = "https://the-internet.herokuapp.com/status_codes/404"
-        # Call function to get meanings
-        data = wordObj.getMeaning("does not matter")
-        self.assertEqual(len(data), 0)
-    # Tear down function
-    def tearDown(self):
-        del self.wordObj
 
 class TestQuoteGetterMethods(unittest.TestCase):
     # Set up fuction
@@ -204,6 +150,18 @@ class TestScoreGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.scoreGetterObj
+
+class TestWordGetterMethods(unittest.TestCase):
+    # Set up function
+    def setUp(self):
+        # Initialise object
+        self.wordGetterObj = WordGetter()
+    def test_word_getter_getData(self):
+        # Check type of response from get data
+        self.assertIs(type(self.wordGetterObj.getData()), type([]))
+    # Tear down function
+    def tearDown(self):
+        del self.wordGetterObj
 
 class TestMethods(unittest.TestCase):
     # Check output of getTweet function
