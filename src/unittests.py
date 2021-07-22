@@ -12,7 +12,7 @@ from songGetter import SongGetter
 from eventGetter import EventGetter
 from tweet import getTweet
 from words import Words
-from score import getScore
+from scoreGetter import ScoreGetter
 
 # Read in credentials
 file = open("./credentials.json")
@@ -187,6 +187,24 @@ class TestEventGetterMethods(unittest.TestCase):
     def tearDown(self):
         del self.eventGetterObj
 
+class TestScoreGetterMethods(unittest.TestCase):
+    # Set up function
+    def setUp(self):
+        # Initialise object
+        self.scoreGetterObj = ScoreGetter()
+    # Check get data
+    def test_score_geter_getData(self):
+        # Initialise attribute list
+        attributeList = ["currentDate", "standingsURL", "games"]
+        # Get data
+        res = self.scoreGetterObj.getData()
+        # Check attributes
+        for item in attributeList:
+            self.assertTrue(item in res.keys())
+    # Tear down function
+    def tearDown(self):
+        del self.scoreGetterObj
+
 class TestMethods(unittest.TestCase):
     # Check output of getTweet function
     def test_tweet(self):
@@ -200,11 +218,6 @@ class TestMethods(unittest.TestCase):
             self.assertIs(type(item["profile_image_url"]), type(""))
             self.assertIs(type(item["profile_url"]), type(""))
             self.assertIs(type(item["tweet_url"]), type(""))
-
-    # Check output of getScore function
-    def test_score(self):
-        score = getScore()
-        self.assertEqual(type(score), type({}))
 
 if __name__ == '__main__':
     unittest.main()
