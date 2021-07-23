@@ -7,9 +7,10 @@
 import urllib
 
 # Local Dependencies
+from lyricInterface import LyricInterface
 
 # Initialise class
-class Lyric:
+class Lyric(LyricInterface):
     # Initialise constructor
     def __init__(self, sender):
         # Initialise baseURL

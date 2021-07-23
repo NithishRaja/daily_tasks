@@ -7,9 +7,11 @@
 import random
 # Local Dependencies
 from songGetterInterface import SongGetterInterface
+from lyricInterface import LyricInterface
+from songInterface import SongInterface
 
 class SongGetter(SongGetterInterface):
-    def __init__(self, song, lyric):
+    def __init__(self, song: SongInterface, lyric: LyricInterface):
         # Initialise song object
         self.song = song
         # Initialise lyric object

@@ -6,9 +6,10 @@
 # Dependencies
 
 # Local Dependencies
+from songInterface import SongInterface
 
 # Initialise class
-class Song:
+class Song(SongInterface):
     # Initialise constructor
     def __init__(self, sender):
         # Initialise base URL
