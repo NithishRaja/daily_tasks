@@ -175,11 +175,11 @@ class TestWordGetterMethods(unittest.TestCase):
         # Initialise attribute list
         attributeList = ["word", "wordType", "meaning", "pronunciation"]
         # Call function to get response
-        res = self.wordGetterObj.getData()
+        res = self.wordGetterObj.getWordWithMeaning()
         # Check type of response
         self.assertIs(type(res), type([]))
         # Check length of response array
-        self.assertEqual(len(self.wordGetterObj.getData()), 2)
+        self.assertEqual(len(res), 2)
         # Iterate over elements in response
         for resItem in res:
             # Check attributes

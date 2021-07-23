@@ -6,12 +6,12 @@
 # Dependencies
 import os
 # Local Dependencies
-from getterInterface import GetterInterface
+from wordGetterInterface import WordGetterInterface
 from wordInterface import WordInterface
 from meaningInterface import MeaningInterface
 
 # Initialise class
-class WordGetter(GetterInterface):
+class WordGetter(WordGetterInterface):
     # Define constructor
     def __init__(self, word: WordInterface, meaning: MeaningInterface):
         # Initialise word object
@@ -19,9 +19,9 @@ class WordGetter(GetterInterface):
         # Initialise meaning object
         self.meaningObj = meaning
 
-    def getData(self):
+    def getWordWithMeaning(self):
         """Get word from word obj and find it's meaning.
-        Return the response with meaning of each word appended to it.
+        Return the response with meaning of word appended to it.
         """
         # Call function to get words
         res = self.wordObj.getWord()
