@@ -4,21 +4,17 @@
 #
 
 # Dependencies
-import sys, os
-
-sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
-from helpers.requestFacade import requestFacade
 
 # Initialise class
 class Song:
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise base URL
         self.baseURL = "https://www.billboard.com/charts/hot-100"
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
 
     # Function to split array of strings based on separator
     def splitString(self, stringArr, separator):

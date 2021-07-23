@@ -8,7 +8,6 @@ import unittest, json
 # Local Dependencies
 from dayGetter import DayGetter
 from quoteGetter import QuoteGetter
-from songGetter import SongGetter
 from eventGetter import EventGetter
 from scoreGetter import ScoreGetter
 
@@ -66,33 +65,6 @@ class TestQuoteGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.quoteGetterObj
-
-class TestSongGetterMethods(unittest.TestCase):
-    # Set up fuction
-    def setUp(self):
-        self.songGetterObj = SongGetter()
-    # Check song getter for successful request
-    def test_song_getter_getData_on_success(self):
-        # Initialise list of fileds in song data
-        quoteFields = ["title", "artist", "info", "lyrics"]
-        # Call function to get song data
-        res = self.songGetterObj.getData()
-        # Check response type
-        self.assertIs(type(res), type({}))
-        # Check fields of object
-        for item in res.keys():
-            self.assertTrue(item in quoteFields)
-    # Check song getter for failed request
-    def test_song_getter_getData_on_failure(self):
-        songGetterObj = SongGetter()
-        songGetterObj.songList = []
-        # Call function to get song data
-        res = songGetterObj.getData()
-        # Check response
-        self.assertEqual(res, {})
-    # Tear down function
-    def tearDown(self):
-        del self.songGetterObj
 
 class TestEventGetterMethods(unittest.TestCase):
     # Set up fuction

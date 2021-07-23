@@ -4,15 +4,32 @@
 #
 
 # Dependencies
-import unittest
+import unittest, requests, sys, os
+
+sys.path.append(os.path.abspath(os.path.join("src")))
+
 # Local Dependencies
+from helpers.requestFacade import requestFacade
 from song import Song
 from lyric import Lyric
+from songGetter import SongGetter
+
+def simulate_failed_response(url):
+    res = requests.get("https://the-internet.herokuapp.com/status_codes/404")
+    return {
+        "status": res.status_code,
+        "payload": res.text
+    }
+
+def simulationFacade():
+    return {
+        "HTML": simulate_failed_response
+    }
 
 class TestSongMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
-        self.songObj = Song()
+        self.songObj = Song(requestFacade())
     # Check get song for successful request
     def test_getSong_normal_response(self):
         attrList = ["title", "artist", "info"]
@@ -37,11 +54,11 @@ class TestSongMethods(unittest.TestCase):
             self.assertTrue(item in ["mno", "pqr"])
     # Check get song for failed request
     def test_getSong_failed_response(self):
-        songObj = Song()
-        songObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
-        res = songObj.getSongList()
-        # Check if 100 songs have been returned
-        self.assertTrue(len(songObj.getSongList()) == 0)
+        self.songObj.sender = simulationFacade()
+        # Get response
+        res = self.songObj.getSongList()
+        # Check length of response
+        self.assertTrue(len(res) == 0)
     # Tear down function
     def tearDown(self):
         del self.songObj
@@ -49,12 +66,13 @@ class TestSongMethods(unittest.TestCase):
 class TestLyricMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
-        self.lyricObj = Lyric()
+        self.lyricObj = Lyric(requestFacade())
     # Check get lyric for successful request
     def test_getLyric_normal_response(self):
         # Initialise title and artist
         title = "Bad Habits"
         artist = "Ed Sheeran"
+        # Get response
         res = self.lyricObj.getLyric(title, artist)
         # Check result
         self.assertTrue(len(res) == 8)
@@ -63,6 +81,7 @@ class TestLyricMethods(unittest.TestCase):
         # Initialise title and artist
         title = ""
         artist = ""
+        # Get response
         res = self.lyricObj.getLyric(title, artist)
         # Check result
         self.assertTrue(len(res) == 0)
@@ -70,14 +89,50 @@ class TestLyricMethods(unittest.TestCase):
         # Initialise title and artist
         title = ""
         artist = ""
-        lyricObj = Lyric()
-        lyricObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
-        res = lyricObj.getLyric(title, artist)
+        # Update sender
+        self.lyricObj.sender = simulationFacade()
+        # Get response
+        res = self.lyricObj.getLyric(title, artist)
         # Check result
         self.assertTrue(len(res) == 0)
     # Tear down function
     def tearDown(self):
         del self.lyricObj
+
+class TestSongGetterMethods(unittest.TestCase):
+    # Set up fuction
+    def setUp(self):
+        self.songGetterObj = SongGetter(Song(requestFacade()), Lyric(requestFacade()))
+    # Check song getter for successful request
+    def test_song_getter_getData_on_success(self):
+        # Initialise list of fileds in song data
+        attributeList = ["title", "artist", "info", "lyrics"]
+        # Initialise count
+        count = 2
+        # Call function to get song data
+        res = self.songGetterObj.getSongsWithLyrics(count)
+        # Check response type
+        self.assertIs(type(res), type([]))
+        # Check response length
+        self.assertEqual(len(res), count)
+        # Iterate over elements in response
+        for resItem in res:
+            # Check fields of object
+            for item in resItem.keys():
+                self.assertTrue(item in attributeList)
+    # Check song getter for failed request
+    def test_song_getter_getData_on_failure(self):
+        # Replace populated song list with empty list
+        self.songGetterObj.songList = []
+        # Call function to get song data
+        res = self.songGetterObj.getSongsWithLyrics(1)
+        # Check response
+        self.assertEqual(res, [])
+        # Check response length
+        self.assertEqual(len(res), 0)
+    # Tear down function
+    def tearDown(self):
+        del self.songGetterObj
 
 if __name__ == "__main__":
     unittest.main()

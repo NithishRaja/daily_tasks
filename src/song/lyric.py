@@ -4,21 +4,18 @@
 #
 
 # Dependencies
-import sys, os, urllib
-
-sys.path.append(os.path.abspath(os.path.join("src")))
+import urllib
 
 # Local Dependencies
-from helpers.requestFacade import requestFacade
 
 # Initialise class
 class Lyric:
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise baseURL
         self.baseURL = "https://search.azlyrics.com"
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
 
     # Function to check if string is empty or has escape characters
     def checkString(self, s):
