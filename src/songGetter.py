@@ -6,11 +6,11 @@
 # Dependencies
 import random
 # Local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from song.song import Song
 from song.lyric import Lyric
 
-class SongGetter(Getter):
+class SongGetter(GetterInterface):
     def __init__(self):
         # Initialise song object
         self.song = Song()

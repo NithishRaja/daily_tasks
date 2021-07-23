@@ -6,10 +6,10 @@
 # Dependencies
 import os
 # Local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from word.wordComposite import WordComposite
 
-class WordGetter(Getter):
+class WordGetter(GetterInterface):
     # Define constructor
     def __init__(self):
         # Initialise object

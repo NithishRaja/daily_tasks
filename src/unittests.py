@@ -10,7 +10,6 @@ from dayGetter import DayGetter
 from quoteGetter import QuoteGetter
 from songGetter import SongGetter
 from eventGetter import EventGetter
-from tweet import getTweet
 from wordGetter import WordGetter
 from scoreGetter import ScoreGetter
 
@@ -137,20 +136,6 @@ class TestWordGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.wordGetterObj
-
-class TestMethods(unittest.TestCase):
-    # Check output of getTweet function
-    def test_tweet(self):
-        count = 1
-        tweets = getTweet("nba", credentials["twitter"]["BearerToken"], count)
-        self.assertEqual(len(tweets), count)
-        for item in tweets:
-            self.assertIs(type(item["text"]), type([]))
-            self.assertIs(type(item["name"]), type(""))
-            self.assertIs(type(item["username"]), type(""))
-            self.assertIs(type(item["profile_image_url"]), type(""))
-            self.assertIs(type(item["profile_url"]), type(""))
-            self.assertIs(type(item["tweet_url"]), type(""))
 
 if __name__ == '__main__':
     unittest.main()

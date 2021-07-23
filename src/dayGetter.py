@@ -7,10 +7,10 @@
 from datetime import date
 
 # local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from day.day import Day
 
-class DayGetter(Getter):
+class DayGetter(GetterInterface):
     # Define constructor
     def __init__(self):
         # Initialise day object

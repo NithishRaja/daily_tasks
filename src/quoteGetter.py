@@ -6,10 +6,10 @@
 # Dependencies
 import random
 # Local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from quote.quote import Quote
 
-class QuoteGetter(Getter):
+class QuoteGetter(GetterInterface):
     def __init__(self):
         # Initialise quote object
         self.quote = Quote()

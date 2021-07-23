@@ -7,10 +7,10 @@
 import random, sys
 from datetime import date
 # Local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from event.event import Event
 
-class EventGetter(Getter):
+class EventGetter(GetterInterface):
     def __init__(self):
         # Initialise event class
         self.eventObj = Event("/home/python/userData/file.ics")

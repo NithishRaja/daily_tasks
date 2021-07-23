@@ -7,7 +7,7 @@
 from abc import ABC, abstractmethod
 
 # Initialise getter class
-class Getter(ABC):
+class GetterInterface(ABC):
 
     @abstractmethod
     def getData(self):

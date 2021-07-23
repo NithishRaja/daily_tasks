@@ -6,10 +6,10 @@
 # Dependencies
 from datetime import date
 # Local Dependencies
-from getter import Getter
+from getterInterface import GetterInterface
 from score.score import Score
 
-class ScoreGetter(Getter):
+class ScoreGetter(GetterInterface):
     def __init__(self):
         # Initialise score class
         self.scoreObj = Score()
