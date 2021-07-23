@@ -135,13 +135,15 @@ class TestWordCompositeMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise object
-        self.wordCompositeObj = WordComposite(Meaning(requestFacade()))
+        self.wordCompositeObj = WordComposite()
+        # Initialise sender
+        sender = requestFacade()
         # Add word objects
-        self.wordCompositeObj.addWord(Dictionary(requestFacade()))
-        self.wordCompositeObj.addWord(Merriam(requestFacade()))
+        self.wordCompositeObj.addWord(Dictionary(sender))
+        self.wordCompositeObj.addWord(Merriam(sender))
     def test_word_composite_getWord(self):
         # Initialise attribute list
-        attributeList = ["word", "wordType", "pronunciation", "meaning"]
+        attributeList = ["word", "wordType", "pronunciation"]
         # Call function to get words
         res = self.wordCompositeObj.getWord()
         # Check type of response
@@ -161,12 +163,14 @@ class TestWordGetterMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise word composite
-        wordCompositeObj = WordComposite(Meaning(requestFacade()))
+        wordCompositeObj = WordComposite()
+        # Initialise sender
+        sender = requestFacade()
         # Add words to composite
-        wordCompositeObj.addWord(Dictionary(requestFacade()))
-        wordCompositeObj.addWord(Merriam(requestFacade()))
+        wordCompositeObj.addWord(Dictionary(sender))
+        wordCompositeObj.addWord(Merriam(sender))
         # Initialise object
-        self.wordGetterObj = WordGetter(wordCompositeObj)
+        self.wordGetterObj = WordGetter(wordCompositeObj, Meaning(sender))
     def test_word_getter_getData(self):
         # Initialise attribute list
         attributeList = ["word", "wordType", "meaning", "pronunciation"]

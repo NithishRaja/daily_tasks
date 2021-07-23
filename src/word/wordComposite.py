@@ -7,16 +7,13 @@
 
 # Local Dependencies
 from wordInterface import WordInterface
-from meaningInterface import MeaningInterface
 
 # Initialise class
 class WordComposite(WordInterface):
     # Initialise constructor
-    def __init__(self, meaning: MeaningInterface):
+    def __init__(self):
         # Initialise word array
         self.wordObjList = []
-        # Initialise meaning object
-        self.meaningObj = meaning
 
     # Function to add word to list
     def addWord(self, word: WordInterface):
@@ -37,8 +34,6 @@ class WordComposite(WordInterface):
         for item in self.wordObjList:
             # Call function to get word
             res = item.getWord()
-            # Call function to get meaning
-            res["meaning"] = self.meaningObj.getMeaning(res["word"])
             # Append word to array
             wordList.append(res)
         # Return word list
