@@ -4,25 +4,29 @@
 #
 
 # Dependencies
-import sys, os
-
-sys.path.append(os.path.abspath(os.path.join("src")))
-sys.path.append(os.path.abspath(os.path.join("src", "word")))
 
 # Local Dependencies
-from meaning import Meaning
-from merriam import Merriam
-from dictionary import Dictionary
 from wordInterface import WordInterface
+from meaningInterface import MeaningInterface
 
 # Initialise class
 class WordComposite(WordInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, meaning: MeaningInterface):
         # Initialise word array
-        self.wordObjList = [Dictionary(), Merriam()]
+        self.wordObjList = []
         # Initialise meaning object
-        self.meaningObj = Meaning()
+        self.meaningObj = meaning
+
+    # Function to add word to list
+    def addWord(self, word: WordInterface):
+        """Append word object to list.
+
+        Keyword Arguments:
+        word -- object from class implementing WordInterface
+        """
+        # Append object to list
+        self.wordObjList.append(word)
 
     # Initialise function to get words
     def getWord(self):

@@ -4,22 +4,19 @@
 #
 
 # Dependencies
-import sys, os
-
-sys.path.append(os.path.abspath(os.path.join("src")))
+import os
 
 # Local Dependencies
 from wordInterface import WordInterface
-from helpers.requestFacade import requestFacade
 
 # Initialise class
 class Dictionary(WordInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise baseURL
         self.baseURL = "https://www.dictionary.com"
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
         # Initialise default word
         self.word = {
             "word": "altruism",

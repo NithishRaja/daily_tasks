@@ -4,22 +4,19 @@
 #
 
 # Dependencies
-import sys, os
-
-sys.path.append(os.path.abspath(os.path.join("src")))
+import os
 
 # Local Dependencies
 from meaningInterface import MeaningInterface
-from helpers.requestFacade import requestFacade
 
 # Initialise class
 class Meaning(MeaningInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise baseURL
         self.baseURL = "https://www.merriam-webster.com"
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
 
     # Function to get meaning of word
     def getMeaning(self, word):
