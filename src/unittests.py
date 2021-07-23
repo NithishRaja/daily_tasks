@@ -6,7 +6,7 @@
 # Dependencies
 import unittest, json
 # Local Dependencies
-from day import Day
+from dayGetter import DayGetter
 from quoteGetter import QuoteGetter
 from songGetter import SongGetter
 from eventGetter import EventGetter
@@ -24,41 +24,16 @@ file = open("./config.json")
 config = json.load(file)
 file.close()
 
-class TestDayMethods(unittest.TestCase):
-    # Set up function
+class TestDayGetterMethods(unittest.TestCase):
+    # Set up fuction
     def setUp(self):
-        # Initialise day object
-        self.dayObj = Day()
-    # Check output of getDay function for normal request
-    def test_day_normal_response(self):
-        # Call function to get data
-        dayList = self.dayObj.getData()
-        # Check length of array
-        self.assertTrue(len(dayList) > 0)
-    # Check output of getDay function for normal specified request
-    def test_day_specified_date(self):
-        # Initialise array to hold titles
-        titles = ["French Fries Day", "Cow Appreciation Day", "Beef Tallow Day", "International Rock Day", "Bubblegum Day", "Embrace Your Geekness Day"]
-        # Call function to set date
-        self.dayObj.setDate(day=13, month=7)
-        # Call function to get data
-        dayList = self.dayObj.getData()
-        # Check length of array
-        self.assertEqual(len(dayList), 6)
-        # Check elements of array
-        for item in dayList:
-            self.assertTrue(item["text"] in titles)
-    # Check output of getDay function for bad request
-    def test_day_empty_response(self):
-        # Call function to set date
-        self.dayObj.setDate(day=-1, month=-1)
-        # Call function to get data
-        dayList = self.dayObj.getData()
-        # Check length of array
-        self.assertEqual(len(dayList), 0)
+        self.dayGetterObj = DayGetter()
+    # Check day getter getData
+    def test_dey_getter_getData(self):
+        self.assertIs(type(self.dayGetterObj.getData()), type([]))
     # Tear down function
     def tearDown(self):
-        del self.dayObj
+        del self.dayGetterObj
 
 class TestQuoteGetterMethods(unittest.TestCase):
     # Set up fuction
