@@ -7,13 +7,13 @@
 import os
 # Local Dependencies
 from getterInterface import GetterInterface
-from word.wordComposite import WordComposite
+from wordComposite import WordComposite
 
 class WordGetter(GetterInterface):
     # Define constructor
-    def __init__(self):
+    def __init__(self, wordComposite: WordComposite):
         # Initialise object
-        self.wordObj = WordComposite()
+        self.wordObj = wordComposite
 
     def getData(self):
         """Get word from word obj and return the response."""

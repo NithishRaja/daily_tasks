@@ -9,11 +9,12 @@ import unittest, requests, sys, os
 sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
+from helpers.requestFacade import requestFacade
 from dictionary import Dictionary
 from merriam import Merriam
 from meaning import Meaning
 from wordComposite import WordComposite
-from helpers.requestFacade import requestFacade
+from wordGetter import WordGetter
 
 def simulate_failed_response(url):
     res = requests.get("https://the-internet.herokuapp.com/status_codes/404")
@@ -41,8 +42,8 @@ class TestDictionaryMethods(unittest.TestCase):
         # Check response type
         self.assertIs(type(word), type({}))
         # Check attributes in response
-        for item in attributeList:
-            self.assertTrue(item in word.keys())
+        for item in word.keys():
+            self.assertTrue(item in attributeList)
     # Check output of dictionary class for failed request
     def test_dictionary_getWord_failed_response(self):
         # Initialise default word
@@ -77,8 +78,8 @@ class TestMerriamMethods(unittest.TestCase):
         # Check response type
         self.assertIs(type(word), type({}))
         # Check attributes in response
-        for item in attributeList:
-            self.assertTrue(item in word.keys())
+        for item in word.keys():
+            self.assertTrue(item in attributeList)
     # Check output of merriam class for failed request
     def test_merriam_getWord_failed_response(self):
         # Initialise default word
@@ -147,14 +148,42 @@ class TestWordCompositeMethods(unittest.TestCase):
         self.assertIs(type(res), type([]))
         # Check response length
         self.assertEqual(len(res), 2)
-        # Check attributes of object in list
-        for item in attributeList:
-            self.assertTrue(item in res[0].keys())
-            self.assertTrue(item in res[1].keys())
+        # Iterate over elements in response
+        for resItem in res:
+            # Check attributes of object in list
+            for item in resItem.keys():
+                self.assertTrue(item in attributeList)
     # Tear down function
     def tearDown(self):
         del self.wordCompositeObj
 
+class TestWordGetterMethods(unittest.TestCase):
+    # Set up function
+    def setUp(self):
+        # Initialise word composite
+        wordCompositeObj = WordComposite(Meaning(requestFacade()))
+        # Add words to composite
+        wordCompositeObj.addWord(Dictionary(requestFacade()))
+        wordCompositeObj.addWord(Merriam(requestFacade()))
+        # Initialise object
+        self.wordGetterObj = WordGetter(wordCompositeObj)
+    def test_word_getter_getData(self):
+        # Initialise attribute list
+        attributeList = ["word", "wordType", "meaning", "pronunciation"]
+        # Call function to get response
+        res = self.wordGetterObj.getData()
+        # Check type of response
+        self.assertIs(type(res), type([]))
+        # Check length of response array
+        self.assertEqual(len(self.wordGetterObj.getData()), 2)
+        # Iterate over elements in response
+        for resItem in res:
+            # Check attributes
+            for item in resItem.keys():
+                self.assertTrue(item in attributeList)
+    # Tear down function
+    def tearDown(self):
+        del self.wordGetterObj
 
 if __name__ == '__main__':
     unittest.main()

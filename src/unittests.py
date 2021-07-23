@@ -10,7 +10,6 @@ from dayGetter import DayGetter
 from quoteGetter import QuoteGetter
 from songGetter import SongGetter
 from eventGetter import EventGetter
-from wordGetter import WordGetter
 from scoreGetter import ScoreGetter
 
 # Read in credentials
@@ -124,18 +123,6 @@ class TestScoreGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.scoreGetterObj
-
-class TestWordGetterMethods(unittest.TestCase):
-    # Set up function
-    def setUp(self):
-        # Initialise object
-        self.wordGetterObj = WordGetter()
-    def test_word_getter_getData(self):
-        # Check type of response from get data
-        self.assertIs(type(self.wordGetterObj.getData()), type([]))
-    # Tear down function
-    def tearDown(self):
-        del self.wordGetterObj
 
 if __name__ == '__main__':
     unittest.main()
