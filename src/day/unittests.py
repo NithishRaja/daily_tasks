@@ -64,7 +64,7 @@ class TestDayGetterMethods(unittest.TestCase):
         self.dayGetterObj = DayGetter(Day(requestFacade()))
     # Check day getter getData
     def test_day_getter_getData(self):
-        self.assertIs(type(self.dayGetterObj.getData()), type([]))
+        self.assertIs(type(self.dayGetterObj.getDayList()), type([]))
     # Tear down function
     def tearDown(self):
         del self.dayGetterObj
