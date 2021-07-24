@@ -7,6 +7,7 @@
 import unittest
 # Local Dependencies
 from day import Day
+from dayGetter import DayGetter
 
 class TestDayMethods(unittest.TestCase):
     # Set up function
@@ -33,6 +34,17 @@ class TestDayMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.dayObj
+
+class TestDayGetterMethods(unittest.TestCase):
+    # Set up fuction
+    def setUp(self):
+        self.dayGetterObj = DayGetter()
+    # Check day getter getData
+    def test_dey_getter_getData(self):
+        self.assertIs(type(self.dayGetterObj.getData()), type([]))
+    # Tear down function
+    def tearDown(self):
+        del self.dayGetterObj
 
 if __name__ == "__main__":
     unittest.main()

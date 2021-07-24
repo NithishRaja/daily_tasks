@@ -6,7 +6,6 @@
 # Dependencies
 import unittest, json
 # Local Dependencies
-from dayGetter import DayGetter
 from quoteGetter import QuoteGetter
 from eventGetter import EventGetter
 from scoreGetter import ScoreGetter
@@ -20,17 +19,6 @@ file.close()
 file = open("./config.json")
 config = json.load(file)
 file.close()
-
-class TestDayGetterMethods(unittest.TestCase):
-    # Set up fuction
-    def setUp(self):
-        self.dayGetterObj = DayGetter()
-    # Check day getter getData
-    def test_dey_getter_getData(self):
-        self.assertIs(type(self.dayGetterObj.getData()), type([]))
-    # Tear down function
-    def tearDown(self):
-        del self.dayGetterObj
 
 class TestQuoteGetterMethods(unittest.TestCase):
     # Set up fuction

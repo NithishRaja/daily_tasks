@@ -8,7 +8,7 @@ from datetime import date
 
 # local Dependencies
 from getterInterface import GetterInterface
-from day.day import Day
+from day import Day
 
 class DayGetter(GetterInterface):
     # Define constructor
