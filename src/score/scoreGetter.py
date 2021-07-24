@@ -4,27 +4,23 @@
 #
 
 # Dependencies
-import os, sys
 from datetime import datetime, timedelta
 import dateutil
 
-sys.path.append(os.path.abspath(os.path.join("src")))
-
 # Local Dependencies
-from helpers.requestFacade import requestFacade
 from scoreGetterInterface import ScoreGetterInterface
 
 # Initialise class
 class ScoreGetter(ScoreGetterInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise URLs
         self.baseURL = "http://data.nba.net/10s"
         self.URLIndex = "/prod/v2/today.json"
         # Initialise object to store links
         self.links = {}
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
 
         # Call function to populate links
         self.getLinks()
