@@ -108,9 +108,3 @@ class Quote:
         quotes = self.getQuoteDataByURL(topicURL)
         # Return list
         return quotes
-
-if __name__ == "__main__":
-    obj = Quote()
-    index = obj.getTopicIndex()
-    print(index[0])
-    print(len(index))
