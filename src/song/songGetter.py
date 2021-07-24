@@ -20,17 +20,30 @@ class SongGetter(SongGetterInterface):
         self.songList = []
         # Call function to populate song list
         self.populateSongList()
+        # Call function to randomise song list
+        self.randomizeSongList()
 
     # Function to populate song list
     def populateSongList(self):
+        """Call function in Song class to get list of songs."""
         # Call function to get songs
         temp = self.song.getSongList()
         # Check song list length
         if not len(temp) == 0:
             self.songList = temp
 
+    # Function to randomize song list
+    def randomizeSongList(self):
+        """Shuffle the elements in song list."""
+        random.shuffle(self.songList)
+
     # Function to get random songs with lyrics
     def getSongsWithLyrics(self, maxCount):
+        """Get lyrics for songs up till max count. Return songs with their lyrics.
+
+        Keyword Arguments:
+        maxCount -- integer
+        """
         # Initialise list to hold songs
         result = []
         # Check song list length
@@ -47,9 +60,5 @@ class SongGetter(SongGetterInterface):
                 selectedSong["lyrics"] = self.lyric.getLyric(selectedSong["title"], selectedSong["artist"]["artist"][0])
                 # Append selected song to result
                 result.append(selectedSong)
-            # # Select song at random
-            # result = self.songList[ random.randint(0, len(self.songList)-1) ]
-            # # Call function to get lyrics of song
-            # result["lyrics"] = self.lyric.getLyric(result["title"], result["artist"]["artist"][0])
         # Return result
         return result
