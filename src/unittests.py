@@ -7,7 +7,6 @@
 import unittest, json
 # Local Dependencies
 from quoteGetter import QuoteGetter
-from scoreGetter import ScoreGetter
 
 # Read in credentials
 file = open("./credentials.json")
@@ -52,24 +51,6 @@ class TestQuoteGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.quoteGetterObj
-
-class TestScoreGetterMethods(unittest.TestCase):
-    # Set up function
-    def setUp(self):
-        # Initialise object
-        self.scoreGetterObj = ScoreGetter()
-    # Check get data
-    def test_score_geter_getData(self):
-        # Initialise attribute list
-        attributeList = ["currentDate", "standingsURL", "games"]
-        # Get data
-        res = self.scoreGetterObj.getData()
-        # Check attributes
-        for item in attributeList:
-            self.assertTrue(item in res.keys())
-    # Tear down function
-    def tearDown(self):
-        del self.scoreGetterObj
 
 if __name__ == '__main__':
     unittest.main()

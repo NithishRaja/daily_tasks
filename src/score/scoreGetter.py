@@ -12,9 +12,10 @@ sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
 from helpers.requestFacade import requestFacade
+# from getterInterface import GetterInterface
 
 # Initialise class
-class Score:
+class ScoreGetter:
     # Initialise constructor
     def __init__(self):
         # Initialise URLs
