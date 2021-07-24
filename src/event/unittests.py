@@ -6,8 +6,12 @@
 # Dependencies
 import unittest, sys, os
 from datetime import date
+
+sys.path.append(os.path.abspath(os.path.join("src")))
+
 # Local Dependencies
 from event import Event
+from eventGetter import EventGetter
 
 class TestEventMethods(unittest.TestCase):
     # Set up function
@@ -82,6 +86,18 @@ class TestEventMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.eventObj
+
+class TestEventGetterMethods(unittest.TestCase):
+    # Set up fuction
+    def setUp(self):
+        self.eventGetterObj = EventGetter()
+    # Check get data
+    def test_event_getter_getData(self):
+        # Check response
+        self.assertEqual(type(self.eventGetterObj.getData()), type([]))
+    # Tear down function
+    def tearDown(self):
+        del self.eventGetterObj
 
 if __name__ == "__main__":
     unittest.main()

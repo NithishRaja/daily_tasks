@@ -7,7 +7,6 @@
 import unittest, json
 # Local Dependencies
 from quoteGetter import QuoteGetter
-from eventGetter import EventGetter
 from scoreGetter import ScoreGetter
 
 # Read in credentials
@@ -53,18 +52,6 @@ class TestQuoteGetterMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.quoteGetterObj
-
-class TestEventGetterMethods(unittest.TestCase):
-    # Set up fuction
-    def setUp(self):
-        self.eventGetterObj = EventGetter()
-    # Check get data
-    def test_event_getter_getData(self):
-        # Check response
-        self.assertEqual(type(self.eventGetterObj.getData()), type([]))
-    # Tear down function
-    def tearDown(self):
-        del self.eventGetterObj
 
 class TestScoreGetterMethods(unittest.TestCase):
     # Set up function

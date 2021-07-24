@@ -8,7 +8,7 @@ import random, sys
 from datetime import date
 # Local Dependencies
 from getterInterface import GetterInterface
-from event.event import Event
+from event import Event
 
 class EventGetter(GetterInterface):
     def __init__(self):
