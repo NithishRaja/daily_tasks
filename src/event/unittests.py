@@ -10,23 +10,22 @@ from datetime import date
 sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
-from event import Event
 from eventGetter import EventGetter
 
-class TestEventMethods(unittest.TestCase):
+class TestEventGetterMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise base path
         self.basePath = os.path.join(sys.path[0], "testICS")
         # Initialise quote object
-        self.eventObj = Event(os.path.join(self.basePath, "default.ics"))
+        self.eventGetterObj = EventGetter(os.path.join(self.basePath, "default.ics"))
     # Functions to test get events for normal response
     def test_get_events_normal_response_single_day(self):
         # Initialise startDate and endDate
         startDate = date(year=date.today().year, month=10, day=10)
         endDate = date(year=date.today().year, month=10, day=10)
         # Get response
-        res = self.eventObj.getEvents(startDate, endDate)
+        res = self.eventGetterObj.getEvents(startDate, endDate)
         # Check type of response
         self.assertEqual(type(res), type([]))
         # Check length of array
@@ -38,7 +37,7 @@ class TestEventMethods(unittest.TestCase):
         startDate = date(year=date.today().year, month=10, day=10)
         endDate = date(year=date.today().year, month=10, day=20)
         # Get response
-        res = self.eventObj.getEvents(startDate, endDate)
+        res = self.eventGetterObj.getEvents(startDate, endDate)
         # Check type of response
         self.assertEqual(type(res), type([]))
         # Check length of array
@@ -52,7 +51,7 @@ class TestEventMethods(unittest.TestCase):
         startDate = date(year=date.today().year, month=1, day=10)
         endDate = date(year=date.today().year, month=1, day=20)
         # Get response
-        res = self.eventObj.getEvents(startDate, endDate)
+        res = self.eventGetterObj.getEvents(startDate, endDate)
         # Check type of response
         self.assertEqual(type(res), type([]))
         # Check length of array
@@ -63,9 +62,9 @@ class TestEventMethods(unittest.TestCase):
         startDate = date(year=date.today().year, month=10, day=10)
         endDate = date(year=date.today().year, month=10, day=20)
         # Initialise object
-        eventObj = Event(os.path.join(self.basePath, "empty.ics"))
+        eventGetterObj = EventGetter(os.path.join(self.basePath, "empty.ics"))
         # Get response
-        res = eventObj.getEvents(startDate, endDate)
+        res = eventGetterObj.getEvents(startDate, endDate)
         # Check type of response
         self.assertEqual(type(res), type([]))
         # Check length of array
@@ -76,28 +75,13 @@ class TestEventMethods(unittest.TestCase):
         startDate = date(year=date.today().year, month=10, day=10)
         endDate = date(year=date.today().year, month=10, day=20)
         # Initialise object
-        eventObj = Event(os.path.join(self.basePath, "doesNotExist.ics"))
+        eventGetterObj = EventGetter(os.path.join(self.basePath, "doesNotExist.ics"))
         # Get response
-        res = eventObj.getEvents(startDate, endDate)
+        res = eventGetterObj.getEvents(startDate, endDate)
         # Check type of response
         self.assertEqual(type(res), type([]))
         # Check length of array
         self.assertEqual(len(res), 0)
-    # Tear down function
-    def tearDown(self):
-        del self.eventObj
-
-class TestEventGetterMethods(unittest.TestCase):
-    # Set up fuction
-    def setUp(self):
-        # Initialise base path
-        self.basePath = os.path.join(sys.path[0], "testICS")
-        # Initialise event getter object
-        self.eventGetterObj = EventGetter(Event(os.path.join(self.basePath, "default.ics")))
-    # Check get data
-    def test_event_getter_getEventList(self):
-        # Check response
-        self.assertEqual(type(self.eventGetterObj.getEventList()), type([]))
     # Tear down function
     def tearDown(self):
         del self.eventGetterObj
