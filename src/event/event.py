@@ -8,6 +8,9 @@ import os
 from ics import Calendar
 from datetime import date, timedelta
 
+# Local Dependencies
+from eventInterface import EventInterface
+
 # Initialise class
 class Event:
     # Initialise constructor

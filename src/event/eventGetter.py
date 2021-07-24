@@ -8,12 +8,12 @@ import random, sys
 from datetime import date
 # Local Dependencies
 from getterInterface import GetterInterface
-from event import Event
+from eventInterface import EventInterface
 
 class EventGetter(GetterInterface):
-    def __init__(self):
+    def __init__(self, event: EventInterface):
         # Initialise event class
-        self.eventObj = Event("/home/python/userData/file.ics")
+        self.eventObj = event
 
     # Function to get events
     def getData(self):

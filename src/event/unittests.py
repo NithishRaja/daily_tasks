@@ -90,7 +90,10 @@ class TestEventMethods(unittest.TestCase):
 class TestEventGetterMethods(unittest.TestCase):
     # Set up fuction
     def setUp(self):
-        self.eventGetterObj = EventGetter()
+        # Initialise base path
+        self.basePath = os.path.join(sys.path[0], "testICS")
+        # Initialise event getter object
+        self.eventGetterObj = EventGetter(Event(os.path.join(self.basePath, "default.ics")))
     # Check get data
     def test_event_getter_getData(self):
         # Check response
