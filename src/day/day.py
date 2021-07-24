@@ -4,22 +4,33 @@
 #
 
 # Dependencies
-import sys, os
+import os
 from datetime import date
 
-sys.path.append(os.path.abspath(os.path.join("src")))
-
 # Local Dependencies
-from helpers.requestFacade import requestFacade
+from dayInterface import DayInterface
 
 # Initialise class
-class Day:
+class Day(DayInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Initialise baseURL
         self.baseURL = "https://www.daysoftheyear.com"
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
+
+    # Function to prepare URL
+    def getURLForDate(self, day, month):
+        """Generate URL for given data and return it.
+
+        Keyword Arguments:
+        day -- integer
+        month -- integer
+        """
+        return os.path.join(self.baseURL, "days",
+                           str(date.today().year),
+                           str(month).zfill(2),
+                           str(day).zfill(2))
 
     # Function to get day by date
     def getDayByDate(self, day, month):
@@ -31,11 +42,8 @@ class Day:
         """
         # Initialise array for data
         data = []
-        # Prepare URL
-        URL = os.path.join(self.baseURL, "days",
-                           str(date.today().year),
-                           str(month).zfill(2),
-                           str(day).zfill(2))
+        # Call function to get complete URL
+        URL = self.getURLForDate(day, month)
         # Call function to send request and get HTML response
         res = self.sender["HTML"](URL)
         # Check status code

@@ -4,16 +4,32 @@
 #
 
 # Dependencies
-import unittest
+import unittest, requests, sys, os
+
+sys.path.append(os.path.abspath(os.path.join("src")))
+
 # Local Dependencies
+from helpers.requestFacade import requestFacade
 from day import Day
 from dayGetter import DayGetter
+
+def simulate_failed_response(url):
+    res = requests.get("https://the-internet.herokuapp.com/status_codes/404")
+    return {
+        "status": res.status_code,
+        "payload": res.text
+    }
+
+def simulationFacade():
+    return {
+        "HTML": simulate_failed_response
+    }
 
 class TestDayMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise day object
-        self.dayObj = Day()
+        self.dayObj = Day(requestFacade())
     # Check output of getDayByDate function for normal specified request
     def test_day_specified_date(self):
         # Initialise array to hold titles
@@ -31,6 +47,13 @@ class TestDayMethods(unittest.TestCase):
         dayList = self.dayObj.getDayByDate(day=-13, month=-7)
         # Check length of array
         self.assertEqual(len(dayList), 0)
+    # Check output of getDayByDate function for failed request
+    def test_day_failed_response(self):
+        self.dayObj.sender = simulationFacade()
+        # Call function to get data
+        dayList = self.dayObj.getDayByDate(day=-13, month=-7)
+        # Check length of array
+        self.assertEqual(len(dayList), 0)
     # Tear down function
     def tearDown(self):
         del self.dayObj
@@ -38,9 +61,9 @@ class TestDayMethods(unittest.TestCase):
 class TestDayGetterMethods(unittest.TestCase):
     # Set up fuction
     def setUp(self):
-        self.dayGetterObj = DayGetter()
+        self.dayGetterObj = DayGetter(Day(requestFacade()))
     # Check day getter getData
-    def test_dey_getter_getData(self):
+    def test_day_getter_getData(self):
         self.assertIs(type(self.dayGetterObj.getData()), type([]))
     # Tear down function
     def tearDown(self):

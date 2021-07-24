@@ -8,13 +8,13 @@ from datetime import date
 
 # local Dependencies
 from getterInterface import GetterInterface
-from day import Day
+from dayInterface import DayInterface
 
 class DayGetter(GetterInterface):
     # Define constructor
-    def __init__(self):
+    def __init__(self, day: DayInterface):
         # Initialise day object
-        self.dayObj = Day()
+        self.dayObj = day
 
     # Get data function
     def getData(self):
