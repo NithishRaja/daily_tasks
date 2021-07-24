@@ -95,9 +95,9 @@ class TestEventGetterMethods(unittest.TestCase):
         # Initialise event getter object
         self.eventGetterObj = EventGetter(Event(os.path.join(self.basePath, "default.ics")))
     # Check get data
-    def test_event_getter_getData(self):
+    def test_event_getter_getEventList(self):
         # Check response
-        self.assertEqual(type(self.eventGetterObj.getData()), type([]))
+        self.assertEqual(type(self.eventGetterObj.getEventList()), type([]))
     # Tear down function
     def tearDown(self):
         del self.eventGetterObj

@@ -4,19 +4,18 @@
 #
 
 # Dependencies
-import random, sys
 from datetime import date
 # Local Dependencies
-from getterInterface import GetterInterface
+from eventGetterInterface import EventGetterInterface
 from eventInterface import EventInterface
 
-class EventGetter(GetterInterface):
+class EventGetter(EventGetterInterface):
     def __init__(self, event: EventInterface):
         # Initialise event class
         self.eventObj = event
 
     # Function to get events
-    def getData(self):
+    def getEventList(self):
         # Get today date
         today = date.today()
         # Return list of events for today
