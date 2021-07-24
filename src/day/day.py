@@ -53,7 +53,7 @@ class Day(DayInterface):
             # Extract data
             for day in dayList:
                 data.append({
-                    "text": day.text,
+                    "text": day.text.replace("\xa0", " "),
                     "link": day["href"]
                 })
         # Return data array
