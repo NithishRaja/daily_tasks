@@ -4,25 +4,38 @@
 #
 
 # Dependencies
-import os, sys
+import os, sys, random
 
 sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
 from helpers.requestFacade import requestFacade
-from getterInterface import GetterInterface
+from quoteGetterInterface import QuoteGetterInterface
 
 # Initialise class
-class QuoteGetter:
+class QuoteGetter(QuoteGetterInterface):
     # Initialise constructor
     def __init__(self):
         # Set baseURL
         self.baseURL = "https://www.brainyquote.com"
+        # Initialise list for topic index
+        self.topicIndex = []
+        # Initialise list for topic index
+        self.topicList = []
         # Initialise sender
         self.sender = requestFacade()
 
+        # Call function to get topic index
+        self.populateTopicIndex()
+        # Initialise variable for selected topic index
+        self.selectedTopicIndex = self.randomSelectElement(self.topicIndex)
+
+        # Call function to get topic list
+        self.populateTopicList()
+
+
     # Function to get quote topics index
-    def getTopicIndex(self):
+    def populateTopicIndex(self):
         """Function to scrape baseURL for compressed quote topics list"""
         # Initialise array for index
         topicIndex = []
@@ -38,20 +51,26 @@ class QuoteGetter:
                     "name": item.text,
                     "href": item["href"]
                 })
-        # Return list
-        return topicIndex
+        # Set topic index
+        self.topicIndex = topicIndex
 
-    # Function to get list of quote topics
-    def getTopicList(self, indexURL):
-        """Function to scrape baseURL+indexURL for selected quote topics.
+    # Function to select a random element from list
+    def randomSelectElement(self, list):
+        """Randomly select an item from given list and return it.
 
         Keyword Arguments:
-        indexURL -- string
+        list -- array
         """
+        return random.choice(list)
+
+
+    # Function to get list of quote topics
+    def populateTopicList(self):
+        """Function to scrape for list of quote topics."""
         # Initialise array to hold topics
         topics = []
         # Prepare URL
-        URL = self.baseURL + indexURL
+        URL = self.baseURL + self.selectedTopicIndex["href"]
         # Send request
         res = self.sender["HTML"](URL)
         # Check response status
@@ -65,7 +84,7 @@ class QuoteGetter:
                     "href": item["href"]
                 })
         # Return list
-        return topics
+        self.topicList = topics
 
     # Function to get quote data
     def getQuoteDataByURL(self, topicURL):
@@ -96,16 +115,20 @@ class QuoteGetter:
         # Return quote list
         return quotes
 
-    # Function to get quote data
-    def getQuoteDataByTopic(self, topic):
-        """Function to prepeare URL for given topic and call getQuoteDataByURL.
-
-        Keyword Arguments:
-        topic -- string
-        """
-        # Generate quote URL
-        topicURL = "/topics/"+topic.lower()+"-quotes"
-        # Call function to get list of quotes
-        quotes = self.getQuoteDataByURL(topicURL)
-        # Return list
-        return quotes
+    # Function to get quotes from a randomly selected topic
+    def getQuoteList(self):
+        # Call function to select a topic at random
+        selectedTopic = self.randomSelectElement(self.topicList)
+        # Call function to get quote list
+        quoteList = self.getQuoteDataByURL(selectedTopic["href"])
+        # Check if quote list is empty
+        if len(quoteList) == 0:
+            quoteList.append({
+                "text": "To refactor or to start from scratch?",
+                "author": "Cocoa Puffs"
+            })
+        # Return data
+        return {
+            "topic": selectedTopic["name"],
+            "quotes": quoteList
+        }
