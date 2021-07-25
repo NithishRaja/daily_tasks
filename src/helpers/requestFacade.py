@@ -7,7 +7,7 @@
 import requests, bs4, json
 
 # Function to send requests to given url
-def send(url):
+def send(url, headers={}):
     """Send requests to url. Retry upto 3 times upon failure.
 
     Keyword Arguments:
@@ -29,7 +29,7 @@ def send(url):
             # Update counter
             retryCount = retryCount + 1
             # Send request
-            res = requests.get(url)
+            res = requests.get(url, headers=headers)
             # Check status code
             if res.status_code >= 400 and res.status_code <= 499:
                 response["status"] = res.status_code
@@ -46,7 +46,7 @@ def send(url):
     return response
 
 # Function to parse JSON response
-def parse_JSON(url):
+def parse_JSON(url, headers={}):
     """Calls send_request function with given url.
     Parse returned payload into JSON
 
@@ -54,14 +54,14 @@ def parse_JSON(url):
     url -- string
     """
     # Call send_request function
-    res = send(url)
+    res = send(url, headers)
     # Parse payload
     res["payload"] = json.loads(res["payload"])
     # Return response object
     return res
 
 # Function to parse HTML response
-def parse_HTML(url):
+def parse_HTML(url, headers={}):
     """Calls send_request function with given url.
     Parse returned payload into HTML
 
@@ -69,7 +69,7 @@ def parse_HTML(url):
     url -- string
     """
     # Call send_request function
-    res = send(url)
+    res = send(url, headers)
     # Parse payload
     res["payload"] = bs4.BeautifulSoup(res["payload"], features="html.parser")
     # Return response object
