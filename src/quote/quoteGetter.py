@@ -4,18 +4,15 @@
 #
 
 # Dependencies
-import os, sys, random
-
-sys.path.append(os.path.abspath(os.path.join("src")))
+import os, random
 
 # Local Dependencies
-from helpers.requestFacade import requestFacade
 from quoteGetterInterface import QuoteGetterInterface
 
 # Initialise class
 class QuoteGetter(QuoteGetterInterface):
     # Initialise constructor
-    def __init__(self):
+    def __init__(self, sender):
         # Set baseURL
         self.baseURL = "https://www.brainyquote.com"
         # Initialise list for topic index
@@ -23,7 +20,7 @@ class QuoteGetter(QuoteGetterInterface):
         # Initialise list for topic index
         self.topicList = []
         # Initialise sender
-        self.sender = requestFacade()
+        self.sender = sender
 
         # Call function to get topic index
         self.populateTopicIndex()

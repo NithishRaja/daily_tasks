@@ -4,15 +4,31 @@
 #
 
 # Dependencies
-import unittest
+import unittest, requests, sys, os
+
+sys.path.append(os.path.abspath(os.path.join("src")))
+
 # Local Dependencies
+from helpers.requestFacade import requestFacade
 from quoteGetter import QuoteGetter
+
+def simulate_failed_response(url):
+    res = requests.get("https://the-internet.herokuapp.com/status_codes/404")
+    return {
+        "status": res.status_code,
+        "payload": res.text
+    }
+
+def simulationFacade():
+    return {
+        "HTML": simulate_failed_response
+    }
 
 class TestQuoteGetterMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise quote object
-        self.quoteGetterObj = QuoteGetter()
+        self.quoteGetterObj = QuoteGetter(requestFacade())
     # Check output of quote topic index for successful request
     def test_quote_topic_index_normal_response(self):
         # Check topic index type
@@ -21,7 +37,7 @@ class TestQuoteGetterMethods(unittest.TestCase):
         self.assertEqual(len(self.quoteGetterObj.topicIndex), 226)
     # Check output of quote topic index for failed request
     def test_quote_topic_index_failed_response(self):
-        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.sender = simulationFacade()
         # Call function to populate topic index
         self.quoteGetterObj.populateTopicIndex()
         # Check topic index type
@@ -42,7 +58,7 @@ class TestQuoteGetterMethods(unittest.TestCase):
         self.assertEqual(len(self.quoteGetterObj.topicList), 64)
     # Check output of quote topic index for failed request
     def test_quote_topic_failed_response(self):
-        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.sender = simulationFacade()
         self.selectedTopicIndex = {
             "name": "test",
             "href": "/topic_index/ec"
@@ -65,7 +81,7 @@ class TestQuoteGetterMethods(unittest.TestCase):
         for item in ["text", "author"]:
             self.assertTrue(item in res[0].keys())
     def test_quote_data_by_URL_failed_response(self):
-        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.sender = simulationFacade()
         topicURL = ""
         res = self.quoteGetterObj.getQuoteDataByURL(topicURL)
         # Check type
@@ -90,7 +106,7 @@ class TestQuoteGetterMethods(unittest.TestCase):
             "text": "To refactor or to start from scratch?",
             "author": "Cocoa Puffs"
         }
-        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.sender = simulationFacade()
         res = self.quoteGetterObj.getQuoteList()
         # Check type of response
         self.assertIs(type(res), type({}))
