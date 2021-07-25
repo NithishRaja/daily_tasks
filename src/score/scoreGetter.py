@@ -159,16 +159,6 @@ class ScoreGetter(ScoreGetterInterface):
         # Return date
         return date
 
-    # Function to return URL for standings
-    def getStandingsURL(self):
-        """Return URL to site with team standings."""
-        return "https://www.nba.com/standings"
-
-    # Function to get today score
-    def getScoreToday(self):
-        """Call function to get score and pass current date to it."""
-        return self.getScoreByDay(self.getCurrentDate())
-
     # Function to get score by date
     def getScoreByDay(self, date):
         """Send a request to get list of games and their details on a particular day.
