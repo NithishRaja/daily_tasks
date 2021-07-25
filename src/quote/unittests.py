@@ -6,65 +6,61 @@
 # Dependencies
 import unittest
 # Local Dependencies
-from quote import Quote
+from quoteGetter import QuoteGetter
 
 class TestQuoteMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
         # Initialise quote object
-        self.quoteObj = Quote()
+        self.quoteGetterObj = QuoteGetter()
     # Check output of quote topic index for successful request
     def test_quote_topic_index_normal_response(self):
-        res = self.quoteObj.getTopicIndex()
+        res = self.quoteGetterObj.getTopicIndex()
         self.assertTrue(len(res) == 226)
     # Check output of quote topic index for failed request
     def test_quote_topic_index_failed_response(self):
-        quoteObj = Quote()
-        quoteObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
-        res = quoteObj.getTopicIndex()
+        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        res = self.quoteGetterObj.getTopicIndex()
         self.assertIs(type(res), type([]))
         self.assertTrue(len(res) == 0)
     # Check output of quote topic index for successful request
     def test_quote_topic_normal_response(self):
         indexURL = "/topic_index/ec"
-        res = self.quoteObj.getTopicList(indexURL)
+        res = self.quoteGetterObj.getTopicList(indexURL)
         self.assertTrue(len(res) == 64)
     # Check output of quote topic index for failed request
     def test_quote_topic_failed_response(self):
-        quoteObj = Quote()
-        quoteObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
         indexURL = ""
-        res = quoteObj.getTopicList(indexURL)
+        res = self.quoteGetterObj.getTopicList(indexURL)
         self.assertIs(type(res), type([]))
         self.assertTrue(len(res) == 0)
     # Check quote by URL for normal response
     def test_quote_data_by_URL_normal_response(self):
         topicURL = "/topics/echoes-quotes"
-        res = self.quoteObj.getQuoteDataByURL(topicURL)
+        res = self.quoteGetterObj.getQuoteDataByURL(topicURL)
         self.assertTrue(len(res) >= 45)
     def test_quote_data_by_URL_failed_response(self):
-        quoteObj = Quote()
-        quoteObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
         topicURL = ""
-        res = quoteObj.getQuoteDataByURL(topicURL)
+        res = self.quoteGetterObj.getQuoteDataByURL(topicURL)
         self.assertIs(type(res), type([]))
         self.assertTrue(len(res) == 0)
     # Check quote by topic for normal response
     def test_quote_data_by_topic_normal_response(self):
         topic = "Echoes"
-        res = self.quoteObj.getQuoteDataByTopic(topic)
+        res = self.quoteGetterObj.getQuoteDataByTopic(topic)
         self.assertTrue(len(res) >= 45)
     # Check quote by topic for failed response
     def test_quote_data_by_topic_failed_response(self):
-        quoteObj = Quote()
-        quoteObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
+        self.quoteGetterObj.baseURL = "https://the-internet.herokuapp.com/status_codes/404"
         topicURL = ""
-        res = quoteObj.getQuoteDataByURL(topicURL)
+        res = self.quoteGetterObj.getQuoteDataByURL(topicURL)
         self.assertIs(type(res), type([]))
         self.assertTrue(len(res) == 0)
     # Tear down function
     def tearDown(self):
-        del self.quoteObj
+        del self.quoteGetterObj
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,9 +10,10 @@ sys.path.append(os.path.abspath(os.path.join("src")))
 
 # Local Dependencies
 from helpers.requestFacade import requestFacade
+from getterInterface import GetterInterface
 
 # Initialise class
-class Quote:
+class QuoteGetter:
     # Initialise constructor
     def __init__(self):
         # Set baseURL
