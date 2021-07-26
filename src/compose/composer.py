@@ -133,17 +133,22 @@ class Composer:
     # Function to extract song from song getter
     def extractSong(self):
         """Get songs from song getter and corresponding video from video getter."""
+        # Initialise variable to hold song
+        selectedSong = None
         # Call function to get song
-        selectedSong = self.songGetter.getSongsWithLyrics(1)[0]
-        # Call function to get video URL for song
-        videoURL = self.videoGetter.getVideoURL(selectedSong["title"]+" "+selectedSong["artist"]["artist"][0])
-        # Call function to get lyric video URL for song
-        lyricVideoURL = self.videoGetter.getVideoURL(selectedSong["title"]+" "+selectedSong["artist"]["artist"][0]+" lyrics")
-        # Add video URLs to selected song
-        selectedSong["video"] = {
-            "watch": videoURL,
-            "lyric": lyricVideoURL
-        }
+        res = self.songGetter.getSongsWithLyrics(1)
+        # Check if response is empty
+        if not len(res) == 0:
+            selectedSong = res[0]
+            # Call function to get video URL for song
+            videoURL = self.videoGetter.getVideoURL(selectedSong["title"]+" "+selectedSong["artist"]["artist"][0])
+            # Call function to get lyric video URL for song
+            lyricVideoURL = self.videoGetter.getVideoURL(selectedSong["title"]+" "+selectedSong["artist"]["artist"][0]+" lyrics")
+            # Add video URLs to selected song
+            selectedSong["video"] = {
+                "watch": videoURL,
+                "lyric": lyricVideoURL
+            }
         # Return selected song
         return selectedSong
 
@@ -160,11 +165,15 @@ class Composer:
     # Function to extract day from day getter
     def extractDay(self):
         """Call getDayByDate and get tweets for randomly chosen day."""
+        # Initialise variable to hold randomly selected day
+        selectedDay = None
         # Call getDayByDate function
         res = self.dayGetter.getDayByDate(day=date.today().day, month=date.today().month)
-        # Select a day at random
-        selectedDay = random.choice(res)
-        # Call function to get tweets
-        selectedDay["tweet"] = self.tweetGetter.getTweetList(selectedDay["text"])
+        # Check if response is empty
+        if not len(res) == 0:
+            # Select a day at random
+            selectedDay = random.choice(res)
+            # Call function to get tweets
+            selectedDay["tweet"] = self.tweetGetter.getTweetList(selectedDay["text"])
         # Return selected day with tweets
         return selectedDay
