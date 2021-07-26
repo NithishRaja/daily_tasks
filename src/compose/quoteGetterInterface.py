@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 # "topic" and "quotes"
 # Quotes should be a list of objects and those qbjects should have the following fields
 # "text" and "author"
-# In case of errors/failures, make the quotes array empty
+# In case of errors/failures, a default quote should be returned with the same fields
 
 # Initialise class
 class QuoteGetterInterface(ABC):

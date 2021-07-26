@@ -8,7 +8,8 @@ from abc import ABC, abstractmethod
 
 # The class should always contain a getDayByDate function
 # getDayByDate function takes day and month as input (both integers)
-# getDayByDate function should return a list of strings
+# getDayByDate function should return a list of objects with the following fields
+# "text" and "link"
 # In case of errors/failures, return an empty list
 
 # Initialise class
