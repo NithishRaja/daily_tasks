@@ -6,7 +6,7 @@
 # Dependencies
 
 # Local Dependencies
-from tweetGetterInterface import TweetGetterInterface
+from compose.tweetGetterInterface import TweetGetterInterface
 
 # Initialise class
 class TweetGetter(TweetGetterInterface):

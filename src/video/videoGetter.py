@@ -6,7 +6,7 @@
 # Dependencies
 
 # Local Dependencies
-from videoGetterInterface import VideoGetterInterface
+from compose.videoGetterInterface import VideoGetterInterface
 
 # Initialise class
 class VideoGetter(VideoGetterInterface):

@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 import dateutil
 
 # Local Dependencies
-from scoreGetterInterface import ScoreGetterInterface
+from compose.scoreGetterInterface import ScoreGetterInterface
 
 # Initialise class
 class ScoreGetter(ScoreGetterInterface):

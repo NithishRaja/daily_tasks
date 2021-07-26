@@ -6,7 +6,7 @@
 # Dependencies
 import random
 # Local Dependencies
-from songGetterInterface import SongGetterInterface
+from compose.songGetterInterface import SongGetterInterface
 from lyricInterface import LyricInterface
 from songInterface import SongInterface
 

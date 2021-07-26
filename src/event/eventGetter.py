@@ -9,7 +9,7 @@ from ics import Calendar
 from datetime import date, timedelta
 
 # Local Dependencies
-from eventGetterInterface import EventGetterInterface
+from compose.eventGetterInterface import EventGetterInterface
 
 # Initialise class
 class EventGetter(EventGetterInterface):

@@ -7,7 +7,7 @@
 import os, random
 
 # Local Dependencies
-from quoteGetterInterface import QuoteGetterInterface
+from compose.quoteGetterInterface import QuoteGetterInterface
 
 # Initialise class
 class QuoteGetter(QuoteGetterInterface):

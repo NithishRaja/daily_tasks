@@ -6,7 +6,7 @@
 # Dependencies
 import os
 # Local Dependencies
-from wordGetterInterface import WordGetterInterface
+from compose.wordGetterInterface import WordGetterInterface
 from wordInterface import WordInterface
 from meaningInterface import MeaningInterface
 

@@ -8,7 +8,7 @@ import os
 from datetime import date
 
 # Local Dependencies
-from dayGetterInterface import DayGetterInterface
+from compose.dayGetterInterface import DayGetterInterface
 
 # Initialise class
 class DayGetter(DayGetterInterface):
