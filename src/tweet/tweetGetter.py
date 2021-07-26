@@ -167,9 +167,10 @@ class TweetGetter(TweetGetterInterface):
                     # Add tweet id to data
                     data["id"] = tweetObj["data"][i]["id"]
                     # Check if tweet has URLs
-                    if "urls" in tweetObj["data"][i]["entities"].keys():
-                        # Replace URLs
-                        tweetObj["data"][i]["text"] = self.replaceURL(tweetObj["data"][i]["text"], tweetObj["data"][i]["entities"]["urls"])
+                    if "entities" in tweetObj["data"][i].keys():
+                        if "urls" in tweetObj["data"][i]["entities"].keys():
+                            # Replace URLs
+                            tweetObj["data"][i]["text"] = self.replaceURL(tweetObj["data"][i]["text"], tweetObj["data"][i]["entities"]["urls"])
                     # Call function to annotate text
                     data["text"] = self.annotateText(tweetObj["data"][i]["text"])
 
