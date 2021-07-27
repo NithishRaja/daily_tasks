@@ -14,6 +14,7 @@ sys.path.append(os.path.abspath(os.path.join("src", "word")))
 from helpers.requestFacade import requestFacade
 from composer import Composer
 from getterFactory import GetterFactory
+from persistence.persistInMemory import PersistInMemory
 from event.eventGetter import EventGetter
 from quote.quoteGetter import QuoteGetter
 from song.songGetter import SongGetter
@@ -79,8 +80,10 @@ class TestComposeMethods(unittest.TestCase):
         tweetGetterObj.addToken(credentials["twitter"]["BearerToken"])
         getterFactory.addTweetGetter(tweetGetterObj)
 
+        # Initialise persist in memory object
+        self.persistInMemoryObj = PersistInMemory()
         # Initialise compose object
-        self.composerObj = Composer(getterFactory)
+        self.composerObj = Composer(getterFactory, self.persistInMemoryObj)
 
     # Test getting events
     def test_composer_getting_events(self):
@@ -162,6 +165,54 @@ class TestComposeMethods(unittest.TestCase):
         self.composerObj.getterFactory = getterFactory
         # Check output from extract day function
         self.assertEqual(self.composerObj.extractDay(), None)
+
+    # Test persistence
+    def test_composer_persistence(self):
+        # Call execute function
+        self.composerObj.execute()
+
+        # Check song data in persistence
+        songRes = self.persistInMemory.retrieveDataByKey("song")
+        # Check response type
+        self.assertIs(type(songRes), type({}))
+        # Check response attributes
+        for item in songRes.keys():
+            self.assertTrue(item in ["title", "artist", "info", "lyrics", "video"])
+
+        # Check event data in persistence
+        eventRes = self.persistInMemory.retrieveDataByKey("event")
+        # Check response type
+        self.assertIs(type(eventRes), type([]))
+
+        # Check quote data in persistence
+        quoteRes = self.persistInMemory.retrieveDataByKey("quote")
+        # Check response type
+        self.assertIs(type(quoteRes), type({}))
+        # Check response attributes
+        for item in quoteRes.keys():
+            self.assertTrue(item in ["topic", "text", "author"])
+
+        # Check score data in persistence
+        scoreRes = self.persistInMemory.retrieveDataByKey("score")
+        # Check response type
+        self.assertIs(type(scoreRes), type([]))
+
+        # Check day data in persistence
+        dayRes = self.persistInMemory.retrieveDataByKey("day")
+        # Check response type
+        self.assertIs(type(dayRes), type({}))
+        # Check attributes
+        for item in dayRes.keys():
+            self.assertTrue(item in ["text", "link", "tweet"])
+
+        # Check word data in persistence
+        wordRes = self.persistInMemory.retrieveDataByKey("word")
+        # Check response type
+        self.assertIs(type(wordRes), type([]))
+        # Check attributes
+        for resItem in wordRes:
+            for item in resItem.keys():
+                self.assertTrue(item in ["word", "wordType", "pronunciation", "meaning"])
 
     # Tear down function
     def tearDown(self):
