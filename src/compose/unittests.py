@@ -172,7 +172,7 @@ class TestComposeMethods(unittest.TestCase):
         self.composerObj.execute()
 
         # Check song data in persistence
-        songRes = self.persistInMemory.retrieveDataByKey("song")
+        songRes = self.persistInMemoryObj.retrieveDataByKey("song")
         # Check response type
         self.assertIs(type(songRes), type({}))
         # Check response attributes
@@ -180,12 +180,12 @@ class TestComposeMethods(unittest.TestCase):
             self.assertTrue(item in ["title", "artist", "info", "lyrics", "video"])
 
         # Check event data in persistence
-        eventRes = self.persistInMemory.retrieveDataByKey("event")
+        eventRes = self.persistInMemoryObj.retrieveDataByKey("event")
         # Check response type
         self.assertIs(type(eventRes), type([]))
 
         # Check quote data in persistence
-        quoteRes = self.persistInMemory.retrieveDataByKey("quote")
+        quoteRes = self.persistInMemoryObj.retrieveDataByKey("quote")
         # Check response type
         self.assertIs(type(quoteRes), type({}))
         # Check response attributes
@@ -193,12 +193,12 @@ class TestComposeMethods(unittest.TestCase):
             self.assertTrue(item in ["topic", "text", "author"])
 
         # Check score data in persistence
-        scoreRes = self.persistInMemory.retrieveDataByKey("score")
+        scoreRes = self.persistInMemoryObj.retrieveDataByKey("score")
         # Check response type
         self.assertIs(type(scoreRes), type([]))
 
         # Check day data in persistence
-        dayRes = self.persistInMemory.retrieveDataByKey("day")
+        dayRes = self.persistInMemoryObj.retrieveDataByKey("day")
         # Check response type
         self.assertIs(type(dayRes), type({}))
         # Check attributes
@@ -206,7 +206,7 @@ class TestComposeMethods(unittest.TestCase):
             self.assertTrue(item in ["text", "link", "tweet"])
 
         # Check word data in persistence
-        wordRes = self.persistInMemory.retrieveDataByKey("word")
+        wordRes = self.persistInMemoryObj.retrieveDataByKey("word")
         # Check response type
         self.assertIs(type(wordRes), type([]))
         # Check attributes
@@ -217,6 +217,7 @@ class TestComposeMethods(unittest.TestCase):
     # Tear down function
     def tearDown(self):
         del self.composerObj
+        del self.persistInMemoryObj
 
 if __name__ == "__main__":
     unittest.main()

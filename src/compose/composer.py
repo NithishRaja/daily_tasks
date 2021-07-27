@@ -9,13 +9,16 @@ from datetime import date, timedelta
 
 # Local Dependencies
 from getterFactory import GetterFactory
+from persistenceInterface import PersistenceInterface
 
 # Initialise class
 class Composer:
     # Initialise constructor
-    def __init__(self, getterFactory: GetterFactory):
+    def __init__(self, getterFactory: GetterFactory, persistence: PersistenceInterface):
         # Initialise variable to hold getter factory
         self.getterFactory = getterFactory
+        # Initialise variable to hold persistence object
+        self.persistenceObj = persistence
 
     # Function to extract event list from event getter
     def extractEvent(self):
@@ -106,3 +109,19 @@ class Composer:
             selectedDay["tweet"] = tweetGetter.getTweetList(selectedDay["text"])
         # Return selected day with tweets
         return selectedDay
+
+    # Function to store data extracted from getters
+    def execute(self):
+        """Call extract functions and store the returned data."""
+        # Store song data
+        self.persistenceObj.persistDataByKey("song", self.extractSong())
+        # Store event data
+        self.persistenceObj.persistDataByKey("event", self.extractEvent())
+        # Store quote data
+        self.persistenceObj.persistDataByKey("quote", self.extractQuote())
+        # Store score data
+        self.persistenceObj.persistDataByKey("score", self.extractScore())
+        # Store day data
+        self.persistenceObj.persistDataByKey("day", self.extractDay())
+        # Store word data
+        self.persistenceObj.persistDataByKey("word", self.extractWord())
