@@ -13,6 +13,7 @@ sys.path.append(os.path.abspath(os.path.join("src", "word")))
 # Local Dependencies
 from helpers.requestFacade import requestFacade
 from composer import Composer
+from getterFactory import GetterFactory
 from event.eventGetter import EventGetter
 from quote.quoteGetter import QuoteGetter
 from song.songGetter import SongGetter
@@ -48,20 +49,46 @@ file.close()
 class TestComposeMethods(unittest.TestCase):
     # Set up function
     def setUp(self):
+        # Initialise sender
+        sender = requestFacade()
+        # Initialise getter factory
+        getterFactory = GetterFactory()
+        # Add event getter
+        getterFactory.addEventGetter(EventGetter(os.path.join(sys.path[0], "testICS", "default.ics")))
+        # Add quote getter
+        getterFactory.addQuoteGetter(QuoteGetter(sender))
+        # Add song getter
+        getterFactory.addSongGetter( SongGetter(Song(sender), Lyric(sender)) )
+        # Add video getter
+        videoGetterObj = VideoGetter(requestFacade())
+        videoGetterObj.addKey(credentials["youtube"]["APIKey"])
+        getterFactory.addVideoGetter(videoGetterObj)
+        # Add score getter
+        getterFactory.addScoreGetter(ScoreGetter(sender))
+        # Initialise word composite
+        wordCompositeObj = WordComposite()
+        # Add words to composite
+        wordCompositeObj.addWord(Dictionary(sender))
+        wordCompositeObj.addWord(Merriam(sender))
+        # Add word getter
+        getterFactory.addWordGetter(WordGetter(wordCompositeObj, Meaning(sender)))
+        # Add day getter
+        getterFactory.addDayGetter(DayGetter(sender))
+        # Add tweet getter
+        tweetGetterObj = TweetGetter(sender)
+        tweetGetterObj.addToken(credentials["twitter"]["BearerToken"])
+        getterFactory.addTweetGetter(tweetGetterObj)
+
         # Initialise compose object
-        self.composerObj = Composer()
+        self.composerObj = Composer(getterFactory)
 
     # Test getting events
     def test_composer_getting_events(self):
-        # Add event getter
-        self.composerObj.addEventGetter(EventGetter(os.path.join(sys.path[0], "testICS", "default.ics")))
         # Check output of extract event
         self.assertIs(type(self.composerObj.extractEvent()), type([]))
 
     # Test getting quote
     def test_composer_getting_quote(self):
-        # Add quote getter
-        self.composerObj.addQuoteGetter(QuoteGetter(requestFacade()))
         # Call extract quote function
         res = self.composerObj.extractQuote()
         # Check response type
@@ -72,12 +99,6 @@ class TestComposeMethods(unittest.TestCase):
 
     # Test getting song success
     def test_composer_getting_song_success(self):
-        # Add song getter
-        self.composerObj.addSongGetter( SongGetter(Song(requestFacade()), Lyric(requestFacade())) )
-        # Add video getter
-        videoGetterObj = VideoGetter(requestFacade())
-        videoGetterObj.addKey(credentials["youtube"]["APIKey"])
-        self.composerObj.addVideoGetter(videoGetterObj)
         # Call extract song function
         res = self.composerObj.extractSong()
         # Check response type
@@ -88,33 +109,26 @@ class TestComposeMethods(unittest.TestCase):
 
     # Test getting song failure
     def test_composer_getting_song_failure(self):
+        # Initialise getter factory
+        getterFactory = GetterFactory()
         # Add song getter
-        self.composerObj.addSongGetter( SongGetter(Song(simulationFacade()), Lyric(simulationFacade())) )
+        getterFactory.addSongGetter( SongGetter(Song(simulationFacade()), Lyric(simulationFacade())) )
         # Add video getter
-        videoGetterObj = VideoGetter(simulationFacade())
+        videoGetterObj = VideoGetter(requestFacade())
         videoGetterObj.addKey(credentials["youtube"]["APIKey"])
-        self.composerObj.addVideoGetter(videoGetterObj)
+        getterFactory.addVideoGetter(videoGetterObj)
+        # Add getter factory to composer
+        self.composerObj.getterFactory = getterFactory
         # Check response type
         self.assertEqual(self.composerObj.extractSong(), None)
 
     # Test getting score
     def test_composer_getting_score(self):
-        # Add score getter
-        self.composerObj.addScoreGetter(ScoreGetter(requestFacade()))
         # Check output from extract score function
         self.assertIs(type(self.composerObj.extractScore()), type([]))
 
     # Test getting word
     def test_composer_getting_word(self):
-        # Initialise word composite
-        wordCompositeObj = WordComposite()
-        # Initialise sender
-        sender = requestFacade()
-        # Add words to composite
-        wordCompositeObj.addWord(Dictionary(sender))
-        wordCompositeObj.addWord(Merriam(sender))
-        # Add word getter
-        self.composerObj.addWordGetter(WordGetter(wordCompositeObj, Meaning(sender)))
         # Call extract word function
         res = self.composerObj.extractWord()
         # Check output from extract word function
@@ -126,12 +140,6 @@ class TestComposeMethods(unittest.TestCase):
 
     # Test getting day success
     def test_composer_getting_day_success(self):
-        # Add day getter
-        self.composerObj.addDayGetter(DayGetter(requestFacade()))
-        # Add tweet getter
-        tweetGetterObj = TweetGetter(requestFacade())
-        tweetGetterObj.addToken(credentials["twitter"]["BearerToken"])
-        self.composerObj.addTweetGetter(tweetGetterObj)
         # Call extract day function
         res = self.composerObj.extractDay()
         # Check output from extract day function
@@ -142,15 +150,18 @@ class TestComposeMethods(unittest.TestCase):
 
     # Test getting day failure
     def test_composer_getting_day_failure(self):
+        # Initialise getter factory
+        getterFactory = GetterFactory()
         # Add day getter
-        self.composerObj.addDayGetter(DayGetter(simulationFacade()))
+        getterFactory.addDayGetter(DayGetter(simulationFacade()))
         # Add tweet getter
         tweetGetterObj = TweetGetter(requestFacade())
         tweetGetterObj.addToken(credentials["twitter"]["BearerToken"])
-        self.composerObj.addTweetGetter(tweetGetterObj)
+        getterFactory.addTweetGetter(tweetGetterObj)
+        # Add getter factory to composer
+        self.composerObj.getterFactory = getterFactory
         # Check output from extract day function
         self.assertEqual(self.composerObj.extractDay(), None)
-
 
     # Tear down function
     def tearDown(self):
