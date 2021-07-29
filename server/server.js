@@ -1,4 +1,4 @@
-/**
+/****
   * File containing server code
   *
   */
@@ -37,10 +37,12 @@ data = {
 };
 */
 
+// Add listener for getting data
 process.stdin.on('data', payload => {
   data = JSON.parse(payload);
 });
 
+// Add route handler for '/data' route
 app.get('/data', function (req, res) {
   // Check if key exists in query parameters
   if("key" in res.req.query){
@@ -48,16 +50,21 @@ app.get('/data', function (req, res) {
     key = res.req.query.key;
     // Check if key exists in data
     if(key in data){
+      // Return data
       res.status(200).end(JSON.stringify(data[key]));
     }else{
+      // Key does not exists, return not found
       res.status(404).end();
     }
   }else{
+    // No key specified, return bad request
     res.status(400).end()
   }
 });
 
+// Add route handler for '/' route
 app.get('/', function (req, res) {
+  // Return index.html file
   res.sendFile(__dirname+"/public/html/index.html");
 });
 
