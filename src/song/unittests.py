@@ -75,7 +75,7 @@ class TestLyricMethods(unittest.TestCase):
         # Get response
         res = self.lyricObj.getLyric(title, artist)
         # Check result
-        self.assertTrue(len(res) == 8)
+        self.assertTrue(len(res) > 0)
     # Check get lyric for bad request
     def test_getLyric_empty_response(self):
         # Initialise title and artist
