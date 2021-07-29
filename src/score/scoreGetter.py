@@ -105,6 +105,8 @@ class ScoreGetter(ScoreGetterInterface):
             status = game["clock"]
         else:
             status = "FINAL"
+        # Return status
+        return status
 
     # Function to extract game data
     def extractGameData(self, scoreboard):
