@@ -14,6 +14,7 @@ sys.path.append(os.path.abspath(os.path.join("src", "word")))
 from helpers.requestFacade import requestFacade
 from composer import Composer
 from getterFactory import GetterFactory
+from UIInterface import UIInterface
 from persistence.persistInMemory import PersistInMemory
 from event.eventGetter import EventGetter
 from quote.quoteGetter import QuoteGetter
@@ -29,6 +30,16 @@ from word.dictionary import Dictionary
 from word.merriam import Merriam
 from day.dayGetter import DayGetter
 from tweet.tweetGetter import TweetGetter
+
+class UISimulator(UIInterface):
+    def __init__(self):
+        pass
+
+    def beginDisplay(self):
+        pass
+
+    def endDisplay(self):
+        pass
 
 def simulate_failed_response(url):
     res = requests.get("https://the-internet.herokuapp.com/status_codes/404")
@@ -83,7 +94,7 @@ class TestComposeMethods(unittest.TestCase):
         # Initialise persist in memory object
         self.persistInMemoryObj = PersistInMemory()
         # Initialise compose object
-        self.composerObj = Composer(getterFactory, self.persistInMemoryObj)
+        self.composerObj = Composer(getterFactory, self.persistInMemoryObj, UISimulator())
 
     # Test getting events
     def test_composer_getting_events(self):

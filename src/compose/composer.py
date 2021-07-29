@@ -10,15 +10,18 @@ from datetime import date, timedelta
 # Local Dependencies
 from getterFactory import GetterFactory
 from persistenceInterface import PersistenceInterface
+from UIInterface import UIInterface
 
 # Initialise class
 class Composer:
     # Initialise constructor
-    def __init__(self, getterFactory: GetterFactory, persistence: PersistenceInterface):
+    def __init__(self, getterFactory: GetterFactory, persistence: PersistenceInterface, UI: UIInterface):
         # Initialise variable to hold getter factory
         self.getterFactory = getterFactory
         # Initialise variable to hold persistence object
         self.persistenceObj = persistence
+        # Initialise variable to hold UI object
+        self.UIObject = UI
 
     # Function to extract event list from event getter
     def extractEvent(self):
@@ -125,3 +128,5 @@ class Composer:
         self.persistenceObj.persistDataByKey("day", self.extractDay())
         # Store word data
         self.persistenceObj.persistDataByKey("word", self.extractWord())
+        # Start display of ui
+        self.UIObject.beginDisplay()
