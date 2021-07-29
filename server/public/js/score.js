@@ -35,7 +35,7 @@ scoreApp.component("score-card", {
     // Read in score
     fetch('/data?key=score')
     .then(response => response.json())
-    .then(data => {this.score = data; console.log(data);});
+    .then(data => this.score = data);
   }
 })
 

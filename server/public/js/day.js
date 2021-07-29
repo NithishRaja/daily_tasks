@@ -38,7 +38,12 @@ dayApp.component("day-card", {
     // Read in day
     fetch('/data?key=day')
     .then(response => response.json())
-    .then(data => this.day = data);
+    .then(data => {
+      for(let i=0;i<data.tweet.length;++i){
+        data.tweet[i].tweet_url = 'https://twitter.com/'+data.tweet[i].username+'/status/'+data.tweet[i].id
+      }
+      this.day = data;
+    });
   }
 })
 
