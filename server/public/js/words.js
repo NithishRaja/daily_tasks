@@ -23,7 +23,7 @@ wordsApp.component("words-card", {
   },
   created(){
     // Read in day
-    fetch('../data/words.json')
+    fetch('/data?key=word')
     .then(response => response.json())
     .then(data => this.words = data);
   }

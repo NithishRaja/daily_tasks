@@ -1,7 +1,10 @@
 let songApp = Vue.createApp({})
 
 let songCardTitle = ("song-card-title", {
-  template: "<h5 class='card-title'>{{title}}</h5><h6 class='card-subtitle text-muted'>{{artist}}</h6>",
+  template: "<h5 class='card-title'>{{title}}</h5><h6 class='card-subtitle text-muted'>"+
+  "<template v-for='item in artist.artist'>{{item}} </template>"+
+  "<template v-if='artist.featured.length > 0'> ft. "+
+  "<template v-for='item in artist.featured'>{{item}} </template></template></h6>",
   props: ["title", "artist"]
 })
 
@@ -33,7 +36,7 @@ songApp.component("song-card", {
   "<div class='card-body'><song-card-title :title='song.title' :artist='song.artist' v-if='song.title' /></div>"+
   "<song-card-info-list v-if='song.info' :info='song.info' />"+
   "<div class='card-body'><song-card-button v-if='song.video' text='watch video' :link='song.video.watch'/>"+
-  "<song-card-button v-if='song.video' text='lyrics video' :link='song.video.lyrics'/></div>"+
+  "<song-card-button v-if='song.video' text='lyrics video' :link='song.video.lyric'/></div>"+
   "<song-card-lyrics v-if='song.lyrics' :lyrics='song.lyrics'/>"+
   "</div>",
   components: {
@@ -49,7 +52,7 @@ songApp.component("song-card", {
   },
   created(){
     // Read in song
-    fetch('../data/song.json')
+    fetch('/data?key=song')
     .then(response => response.json())
     .then(data => this.song = data);
   }

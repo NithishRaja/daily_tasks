@@ -21,8 +21,8 @@ let scoreCardGame = ("score-card-game", {
 
 scoreApp.component("score-card", {
   template: "<div class='card'><div class='card-header text-center'>NBA scores</div>"+
-  "<score-card-game v-for='game in score.games' :game='game' />"+
-  "<div class='card-body text-end'><a class='btn btn-primary' target='_blank' :href='score.standingsURL'>View standings</a></div></div>",
+  "<score-card-game v-for='game in score' :game='game' />"+
+  "<div class='card-body text-end'><a class='btn btn-primary' target='_blank' href='https://www.nba.com/standings'>View standings</a></div></div>",
   components: {
     "score-card-game": scoreCardGame
   },
@@ -33,9 +33,9 @@ scoreApp.component("score-card", {
   },
   created(){
     // Read in score
-    fetch('../data/score.json')
+    fetch('/data?key=score')
     .then(response => response.json())
-    .then(data => this.score = data);
+    .then(data => {this.score = data; console.log(data);});
   }
 })
 

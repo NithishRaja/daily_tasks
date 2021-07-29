@@ -24,7 +24,7 @@ dayApp.component("day-card", {
   template: "<div class='card'>"+
   "<div class='card-body text-center'><h5 class='card-title'>{{day.text}}</h5></div>"+
   "<div class='card-body text-end'><a class='btn btn-primary' target='_blank' :href='day.link'>Read more...</a></div>"+
-  "<day-card-tweets-list v-if='day.tweets' :tweets='day.tweets'/>"+
+  "<day-card-tweets-list v-if='day.tweet' :tweets='day.tweet'/>"+
   "</div>",
   components: {
     "day-card-tweets-list": dayCardTweetsList
@@ -36,7 +36,7 @@ dayApp.component("day-card", {
   },
   created(){
     // Read in day
-    fetch('../data/day.json')
+    fetch('/data?key=day')
     .then(response => response.json())
     .then(data => this.day = data);
   }

@@ -5,7 +5,7 @@ eventsApp.component("events-card", {
   "<div class='card-header text-center'>Upcoming events</div>"+
   "<div v-if='events.length == 0' class='card-body text-center'>No upcoming events</div>"+
   "<ul class='list-group list-group-flush'><li class='list-group-item' v-for='event in events'>"+
-  "<div class='fw-bold'>{{event.name}}</div><span>{{event.date}}</span>"+
+  "<div class='fw-bold'>{{event.name}}</div><span>{{event.date.day}}/{{event.date.month}}/{{event.date.year}}</span>"+
   "</li></ul>"+
   "</div>",
   components: {},
@@ -16,7 +16,7 @@ eventsApp.component("events-card", {
   },
   created(){
     // Read in events
-    fetch('../data/events.json')
+    fetch('/data?key=event')
     .then(response => response.json())
     .then(data => this.events = data);
   }
