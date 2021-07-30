@@ -4,45 +4,22 @@ A simple program to get the "international day", a random quote, a song, calenda
 
 ## Editing code
 
-* Main logic beings at `index.py`
-* Different functionality is separated into separate files located inside `src/` directory
+* Main logic beings at `src/main.py`
+* To get an overview of the program, visit `src/compose/composer.py`
+* Each functionality is separated into a separate package and placed inside `src` directory
 
 ## Running code
 
-* Run `./run.py` to run the program
-* Data retrieved is stored inside `data/` directory
+* Install python dependencies by running `pip install -r requirements.txt`
+* Install javascript dependencies by running `npm install`
+* Run `python src/main.py` to run the program
+* Visit `localhost:8000` to view the UI
 
 ### Calendar
 
 * Create a directory called `userData` in root path
 * Place ics file inside `userData` directory
 * Update ics file name in `config.json` file
-
-### Configuration
-
-* The expiry time for cache can be set in `config.json`
-* Expiry time should adhere to this format `[<days>, <seconds>, <microseconds>]`
-* Number of tweets retrieved can be altered in `config.json`
-* Number of tweets should always be between 1 to 10
-* `config.json` file should have the following format
-```
-{
-  "expiry": {
-    "day": [<days>, <seconds>, <microseconds>],
-    "quote": [<days>, <seconds>, <microseconds>],
-    "song": [<days>, <seconds>, <microseconds>]
-  },
-  "tweetCount": {
-    "day": <count>,
-    "song": <count>
-  },
-  "calendar": {
-    "fileName": <fileName>,
-    "upperLimit": <days>,
-    "lowerLimit": <days>
-  }
-}
-```
 
 ### Credentials
 
