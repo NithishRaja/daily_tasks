@@ -1,0 +1,23 @@
+{
+  "name": "daily_tasks",
+  "version": "1.0.0",
+  "description": "A simple program to get the \"international day\", a random quote, a song, calendar events and NBA scores",
+  "main": "test.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NithishRaja/daily_tasks.git"
+  },
+  "author": "nithish98raja@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NithishRaja/daily_tasks/issues"
+  },
+  "homepage": "https://github.com/NithishRaja/daily_tasks#readme"
+}
