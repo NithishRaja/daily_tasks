@@ -1,16 +1,5 @@
 {
-  "expiry": {
-    "day": [0, 10800, 0],
-    "quote": [0, 10800, 0],
-    "song": [0, 10800, 0]
-  },
-  "tweetCount": {
-    "day": 3,
-    "song": 3
-  },
   "calendar": {
-    "fileName": "nithish98raja@gmail.com.ics",
-    "upperLimit": 10,
-    "lowerLimit": -2
+    "fileName": "nithish98raja@gmail.com.ics"
   }
 }
