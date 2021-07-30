@@ -21,6 +21,18 @@ A simple program to get the "international day", a random quote, a song, calenda
 * Place ics file inside `userData` directory
 * Update ics file name in `config.json` file
 
+### Configuration
+
+* Calender filename needs to be specified in `config.json` file
+* Config file should have the format specified below
+```
+{
+  "calendar": {
+    "fileName": <file name>
+  }
+}
+```
+
 ### Credentials
 
 * Youtube data api key and twitter bearer token are required
