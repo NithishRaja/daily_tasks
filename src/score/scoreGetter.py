@@ -53,7 +53,7 @@ class ScoreGetter(ScoreGetterInterface):
             for score in game[team]["linescore"]:
                 scoreline[team].append(score["score"])
             # Append final score
-            scoreline[team].append(game["hTeam"]["score"])
+            scoreline[team].append(game[team]["score"])
         # Return scoreline
         return scoreline
 
