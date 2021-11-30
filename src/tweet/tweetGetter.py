@@ -148,7 +148,7 @@ class TweetGetter(TweetGetterInterface):
         tweetList = []
 
         # Send request to get tweets
-        res = self.sender["JSON"](self.generateTweetURL(searchString), headers={"Authorization": "Bearer "+"AAAAAAAAAAAAAAAAAAAAALvAQQEAAAAAnyppBbUS%2BH3NPHCgLdtI2y71wzQ%3Dqk26S41LhjJDS0QAE859oswyiwtbwpv2wt0IBfvcdgKMb0g4HC"})
+        res = self.sender["JSON"](self.generateTweetURL(searchString), headers={"Authorization": "Bearer "+self.APIToken})
         # Check status
         if res["status"] == 200:
             # Parse json
@@ -158,7 +158,7 @@ class TweetGetter(TweetGetterInterface):
                 # Iterate over results
                 for i in range(self.tweetCount):
                     # Send request to get user info
-                    userRes = self.sender["JSON"](self.generateUserURL(tweetObj["data"][i]["author_id"]), headers={"Authorization": "Bearer "+"AAAAAAAAAAAAAAAAAAAAALvAQQEAAAAAnyppBbUS%2BH3NPHCgLdtI2y71wzQ%3Dqk26S41LhjJDS0QAE859oswyiwtbwpv2wt0IBfvcdgKMb0g4HC"})
+                    userRes = self.sender["JSON"](self.generateUserURL(tweetObj["data"][i]["author_id"]), headers={"Authorization": "Bearer "+self.APIToken})
                     # Parse json
                     userObj = userRes["payload"]
 
