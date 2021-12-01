@@ -3,15 +3,16 @@
   *
   */
 
-// importing vendor modules
+// Dependencies
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const process = require('process');
 var bodyparser = require("body-parser");
-
-// importing local modules
 
 // initializing express app
 const app = express();
+const server = http.createServer(app);
 
 // setting port value
 app.set("port", process.env.PORT || 8000);
@@ -26,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Initialise variable to hold data
 let data;
 
-/*
+/**/
 data = {
   "quote": {'topic': 'Topics', 'text': 'To refactor or to start from scratch?', 'author': 'Cocoa Puffs'},
   "word": [{'word': 'celerity', 'wordType': 'noun', 'pronunciation': 'suh-ler-i-tee', 'meaning': [': rapidity of motion or action']}, {'word': 'palaver', 'wordType': 'noun', 'pronunciation': 'puh-LAV-er', 'meaning': [': a long parley usually between persons of different cultures or levels of sophistication', ': conference, discussion']}],
@@ -35,7 +36,7 @@ data = {
   "event": [{'name': 'hehehehe2', 'date': {'day': 10, 'month': 10, 'year': 2021}}, {'name': 'hehehehe2', 'date': {'day': 13, 'month': 10, 'year': 2021}}, {'name': 'hehehehe1', 'date': {'day': 10, 'month': 10, 'year': 2021}}],
   "score": [{'gameId': '0042000406', 'boxscoreURL': 'https://global.nba.com/boxscore/#!/0042000406', 'title': ' ROUND 4', 'subtitle': 'MIL wins 4-2', 'clock': "FINAL", 'hTeam': {'id': '1610612749', 'triCode': 'MIL', 'score': ['29', '13', '35', '28', '105']}, 'vTeam': {'id': '1610612756', 'triCode': 'PHX', 'score': ['16', '31', '30', '21', '105']}}]
 };
-*/
+/**/
 
 // Add listener for getting data
 process.stdin.on('data', payload => {
@@ -63,13 +64,25 @@ app.get('/data', function (req, res) {
 });
 
 // Add route handler for '/' route
-app.get('/', function (req, res) {
+app.get('/', function(req, res){
   // Return index.html file
   res.sendFile(__dirname+"/public/html/index.html");
 });
 
+app.post('/exit', function(req, res){
+  console.log("exit");
+  res.sendStatus(200);
+  // process.send("STOP");
+  process.exit();
+});
+
 // listening to port
-app.listen(app.get("port"), function(err){
+server.listen(app.get("port"), function(err){
   if(err) return console.log(err);
   console.log("Server is running on port %d, press Ctrl+C to close", app.get("port"));
+});
+
+process.on("exit", function(){
+  console.log("Closing server...");
+  server.close();
 });
