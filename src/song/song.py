@@ -77,16 +77,16 @@ class Song(SongInterface):
         # Check response status
         if res["status"] == 200:
             # Extract list of HTML elements with song details
-            temp = res["payload"].select(".chart-element__information")
+            temp = res["payload"].select(".o-chart-results-list-row")
             # Iterate over each song
             for item in temp:
                 songList.append({
-                    "title": item.select(".chart-element__information__song")[0].text,
-                    "artist": self.parseArtistString( item.select(".chart-element__information__artist")[0].text ),
+                    "title": item.select("h3")[0].text.strip(),
+                    "artist": self.parseArtistString( item.select("h3 + span")[0].text.strip() ),
                     "info": [
-                        item.select(".text--last")[0].text,
-                        item.select(".text--peak")[0].text,
-                        item.select(".text--week")[0].text
+                        "-",
+                        "-",
+                        "-"
                     ]
                 })
         # Return song list
