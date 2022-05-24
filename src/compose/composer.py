@@ -40,13 +40,11 @@ class Composer:
         """Call getQuoteList function on quoteGetter and return the result."""
         # Retrieve quote getter
         quoteGetter = self.getterFactory.retrieveGetterByName("quote")
-        # Call function to get list of quotes
-        res = quoteGetter.getQuoteList()
-        # select a quote at random
-        selectedQuote = random.choice(res["quotes"])
+        # Call function to get a random quote
+        selectedQuote = quoteGetter.getRandomQuote()
         # Return selected quote with topic
         return {
-            "topic": res["topic"],
+            "topic": selectedQuote["topic"],
             "text": selectedQuote["text"],
             "author": selectedQuote["author"]
         }

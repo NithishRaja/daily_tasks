@@ -17,5 +17,5 @@ from abc import ABC, abstractmethod
 class QuoteGetterInterface(ABC):
 
     @abstractmethod
-    def getQuoteList(self):
+    def getRandomQuote(self):
         pass
